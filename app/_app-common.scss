@@ -23,8 +23,8 @@
 // Custom tabstrip item class
 .navigation__item {
     &:active,
-    &:active Label {
-        @include colorize($color: complementary);
+    &:active Label,Image{
+        color: #3F2D86;
     }
 }
 

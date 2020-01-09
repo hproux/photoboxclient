@@ -65,6 +65,9 @@ export default {
 
 <style lang="scss" scoped>
 // Start custom common variables
+Image, Label{
+  color: #aaa;
+}
 @import "~@nativescript/theme/scss/variables/blue";
 // End custom common variables
 
