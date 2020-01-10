@@ -1,14 +1,14 @@
 <template lang="html">
-    <Home/>
+    <TakePhoto/>
 </template>
 
 <script>
 import Home from "./Home.vue";
-import BottomNav from "./BottomNav.vue";
+import TakePhoto from "./TakePhoto.vue";
 export default {
   components: {
     Home,
-    BottomNav,
+    TakePhoto,
   }
 };
 </script>
