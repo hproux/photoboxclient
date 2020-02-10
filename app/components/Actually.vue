@@ -23,13 +23,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// Start custom common variables
-@import "~@nativescript/theme/scss/variables/blue";
 
-
-
-// End custom common variables
-
-// Custom styles
 
 </style>

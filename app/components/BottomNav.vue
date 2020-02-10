@@ -1,5 +1,5 @@
 <template lang="html">
-  <Page actionBarHidden="true">
+  <Page>
     <BottomNavigation>
         <TabStrip>
           <TabStripItem class="navigation__item">
@@ -64,13 +64,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// Start custom common variables
-Image, Label{
-  color: #aaa;
-}
-@import "~@nativescript/theme/scss/variables/blue";
-// End custom common variables
-
-// Custom styles
 
 </style>

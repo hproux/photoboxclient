@@ -73,6 +73,7 @@ methods: {
 </script>
 
 <style lang="scss" scoped>
+
   .Btn {
     width: 90%;
     border-radius: 100%;
