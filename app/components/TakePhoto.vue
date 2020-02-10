@@ -1,7 +1,7 @@
 <template lang="html">
   <Page>
     <ActionBar class="action-bar">
-      <Label class="action-bar-title" text="TakePhoto"></Label>
+      <Label class="action-bar-title" text=""></Label>
     </ActionBar>
 
     <GridLayout rows="auto, *, auto, auto">
@@ -38,6 +38,7 @@ import { EventData, Observable, fromObject } from "tns-core-modules/data/observa
 import { Page } from "tns-core-modules/ui/page";
 import { View } from 'tns-core-modules/ui/core/view';
 import { takePicture, requestPermissions } from "nativescript-camera";
+import {ImageSource} from "@nativescript/core";
 export default {
   data() {
     return {
@@ -48,6 +49,7 @@ export default {
       height: 240,
       cameraImage: null,
       isThereImg:false,
+      base64 : null,
     }
   },
   methods: {
@@ -58,49 +60,40 @@ export default {
         takePicture({ width: this.width, height: this.height, keepAspectRatio: this.keepAspectRatio, saveToGallery: this.saveToGallery, allowsEditing: this.allowsEditing }).
         then((imageAsset) => {
           this.cameraImage = imageAsset;
-          imageAsset.getImageAsync(function (nativeImage) {
-            let scale = 1;
-            let actualWidth = 0;
-            let actualHeight = 0;
-            if (imageAsset.android) {
-              // get the current density of the screen (dpi) and divide it by the default one to get the scale
-              scale = nativeImage.getDensity() / android.util.DisplayMetrics.DENSITY_DEFAULT;
-              actualWidth = nativeImage.getWidth();
-              actualHeight = nativeImage.getHeight();
-            } else {
-              scale = nativeImage.scale;
-              actualWidth = nativeImage.size.width * scale;
-              actualHeight = nativeImage.size.height * scale;
-            }
+          let source = new ImageSource();
+             source.fromAsset(imageAsset).then((src) => {
+            this.base64 = src.toBase64String("jpg",100);
+            this.base64 = "data:image/jpeg;base64,"+this.base64;
+          },
+          (err) => {
+            console.log("Error -> " + err.message);
           });
-        },
-        (err) => {
-          console.log("Error -> " + err.message);
-        });
       },
-      () => alert('permissions rejected')
-      );
-      if(this.cameraImage!=""){
-        this.isThereImg = true;
-      }
-    },
-    ApiSend: function(){
-      http.request({
-        url: "https://photoboxciasie.000webhostapp.com/index.php/picture",
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        content: JSON.stringify({
-  image:this.cameraImage
-})
-      }).then(response => {
-
-        var result = response.content.toJSON();
-        alert("test");
-      }, error => {
-        console.log(error);
+      (err) => {
+        console.log("Error -> " + err.message);
       });
+    },
+    () => alert('permissions rejected')
+    );
+    if(this.cameraImage!==""){
+      this.isThereImg = true;
     }
+  },
+  ApiSend: function(){
+    http.request({
+      url: "http://100.64.84.201/index.php/picture",
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      content: JSON.stringify({
+        picture: this.base64,
+      })
+    }).then(response => {
+      console.log(response);
+    }, error => {
+      console.log(error);
+    });
   }
+}
 };
 </script>
 

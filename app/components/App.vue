@@ -1,5 +1,5 @@
 <template lang="html">
-    <TakePhoto/>
+    <Home/>
 </template>
 
 <script>
@@ -21,5 +21,10 @@ export default {
 // Custom styles
 Page{
   background: linear-gradient(200deg, #BD5DCD,#824AA7,#604591,#3F2D86,#362472);
+}
+
+ActionBar{
+  height:30em;
+  background-color: black;
 }
 </style>

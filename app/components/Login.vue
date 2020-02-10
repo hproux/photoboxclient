@@ -3,31 +3,27 @@
     <ActionBar class="action-bar">
       <Label class="action-bar-title" text=""></Label>
     </ActionBar>
-    <FlexboxLayout class="FlexBoxLogo" alignItems="center" alignContent="center" flexDirection="column">
+    <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
+      <Label class="LabelConnexion" text="Connexion"/>
       <Image class="LogoPhotoBox" src="~/img/logoPhotoBox.png" />
-      <Label class="LabelPhotoBox" text="PhotoBox"/>
-      <Label class="LabelText" text="Souvenez-vous de vos soirées"/>
+      <TextField class="TextField TextFieldId" :text="id" hint="Identifiant"/>
+      <TextField class="TextField" secure="true" :text="password" hint="Mot de passe"/>
+
       <Button class="Btn BtnConnexion" text="Se connecter" @tap="login"/>
-      <Button class="Btn BtnRegister" text="Commencer" @tap="register"/>
+      <Label class="TagRegister" @tap="register" text="Pas encore de compte ?"/>
     </FlexboxLayout>
   </Page>
 </template>
 
 <script>
-  import Login from "./Login.vue";
-
 export default {
-  components:{
-    Login,
-  },
   data() {
     return {
+      id : null,
+      password : null,
     }
   },
   methods: {
-    login:function(){
-      this.$navigateTo(Login);
-    },
     register:function(){
 
     }
@@ -43,15 +39,21 @@ export default {
 }
 
 .BtnConnexion{
-  margin-top: 35%;
+  margin-top: 25%;
   margin-bottom: 2%;
   color : white;
   background-color: #604591;
 }
 
-.BtnRegister{
-  background-color: white;
-  color: #604591;
+.TextField{
+  color: white;
+  width:80%;
+  placeholder-color:white;
+}
+
+.TextFieldId{
+  margin-top:10%;
+  margin-bottom: 3%;
 }
 
 ActionBar{
@@ -60,8 +62,17 @@ ActionBar{
 }
 
 .LogoPhotoBox{
+  margin-top: 10%;
   width:300px;
 }
+
+.TagRegister{
+  font-size: 17em;
+  color: white;
+  border-color: white;
+  border-bottom-width: 3px;
+}
+
 
 .LabelText{
   color:white;
@@ -69,12 +80,9 @@ ActionBar{
   font-style: italic;
 }
 
-.LabelPhotoBox{
-  font-size:50em;
+.LabelConnexion{
+  font-size:20em;
   color:white;
-}
-
-.FlexBoxLogo{
-  margin-top: 20%;
+  margin-top: 3%;
 }
 </style>
