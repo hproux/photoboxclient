@@ -15,8 +15,10 @@
 
 <script>
   import Login from "./Login.vue";
+  import Register from "./Register.vue";
 
-export default {
+
+  export default {
   components:{
     Login,
   },
@@ -29,13 +31,14 @@ export default {
       this.$navigateTo(Login);
     },
     register:function(){
-
+      this.$navigateTo(Register);
     }
   },
 }
 </script>
 
 <style lang="scss" scoped>
+
 .Btn{
   width : 90%;
   border-radius: 100%;

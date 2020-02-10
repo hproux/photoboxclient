@@ -16,7 +16,15 @@
 </template>
 
 <script>
-export default {
+  import BottomNav from "./BottomNav.vue";
+  import Register from "./Register.vue";
+
+
+  export default {
+    components:{
+      BottomNav,
+      Register,
+    },
   data() {
     return {
       id : null,
@@ -25,6 +33,10 @@ export default {
   },
   methods: {
     register:function(){
+      this.$navigateTo(Register);
+    },
+    login:function(){
+      this.$navigateTo(BottomNav);
 
     }
   },
@@ -49,6 +61,7 @@ export default {
   color: white;
   width:80%;
   placeholder-color:white;
+  font-size: 15em;
 }
 
 .TextFieldId{
@@ -68,20 +81,14 @@ ActionBar{
 
 .TagRegister{
   font-size: 17em;
+  font-style: italic;
   color: white;
   border-color: white;
   border-bottom-width: 3px;
 }
 
-
-.LabelText{
-  color:white;
-  font-size: 17em;
-  font-style: italic;
-}
-
 .LabelConnexion{
-  font-size:20em;
+  font-size:25em;
   color:white;
   margin-top: 3%;
 }
