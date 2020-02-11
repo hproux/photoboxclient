@@ -4,11 +4,9 @@
 
 <script>
 import Home from "./Home.vue";
-import TakePhoto from "./TakePhoto.vue";
 export default {
   components: {
-    Home,
-    TakePhoto,
+    Home
   }
 };
 </script>

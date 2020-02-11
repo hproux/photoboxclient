@@ -20,7 +20,7 @@
         <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
           <Label class="LabelInscritption" text="Inscritption"/>
           <Image class="LogoPhotoBox" src="~/img/logoPhotoBox.png"/>
-          <TextField class="TextField TextFieldMobile" :text="mobile" hint="Téléphone"/>
+          <TextField class="TextField TextFieldMobile" keyboardType="datetime" :text="mobile" hint="Téléphone"/>
           <TextField class="TextField2" :text="mail" hint="mail"/>
           <TextField class="TextField2" :text="password" hint="Mot de passe"/>
           <TextField class="TextField2" :text="passwordVerif" hint="Confirmer le mot de passe"/>
