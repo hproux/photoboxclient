@@ -1,6 +1,6 @@
 <template lang="html">
   <Page>
-    <ActionBar class="action-bar">
+   <ActionBar class="action-bar">
       <Label class="action-bar-title" text=""></Label>
     </ActionBar>
     <TabView tabBackgroundColor="transparent" androidSelectedTabHighlightColor="transparent" selectedTabTextColor="transparent"
@@ -36,9 +36,11 @@
 
 <script>
   import Login from "./Login.vue";
+  import BackArrow from "./BackArrow.vue";
 
   export default {
     components:{
+      BackArrow,
       Login,
     },
 methods: {

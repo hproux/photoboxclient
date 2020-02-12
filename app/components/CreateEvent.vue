@@ -2,14 +2,14 @@
   <Page>
         <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
           <Label class="LabelMain" text="Créer un événement"/>
-          <TextField class="TextField TextFieldName" :text="nom" hint="Nom"/>
-          <TextField class="TextField" :text="adresse" hint="Adresse"/>
+          <TextField class="TextField TextFieldName" v-model="nom" hint="Nom"/>
+          <TextField class="TextField" v-model="adresse" hint="Adresse"/>
           <Label class="TextField TextFieldDate" text="Date de l'événement"/>
-          <DatePicker class="datePicker" :date="date"/>
-            <TextView class="TextViewDescription" hint="Description"/>
+          <DatePicker class="datePicker" :minDate="dateToday" v-model="date"/>
+            <TextView class="TextViewDescription" v-model="description" hint="Description"/>
           <FlexboxLayout flexDirection="row">
             <Label class="LabelPublic" text="Public"/>
-            <Switch offBackgroundColor="#614fa5" color="white" class="switch" :checked="public"/>
+            <Switch offBackgroundColor="#614fa5" color="white" class="switch" v-model="public"/>
           </FlexboxLayout>
           <Button class="BtnCreate" text="Créer" @tap="create"/>
         </FlexboxLayout>
@@ -18,22 +18,47 @@
 
 <script>
   import BottomNav from "./BottomNav.vue";
-
+  import * as http from "http";
   export default {
     components:{
       BottomNav,
     },
 methods: {
   create:function(){
-    this.$navigateTo(BottomNav);
+    if(this.nom && this.adresse && this.description){
+      http.request({
+        url: "http://100.64.84.201/index.php/event",
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        content: JSON.stringify({
+          name : this.nom,
+          date :this.date,
+          location :this.adresse,
+          public : this.public,
+          description:this.description,
+        })
+      }).then(response => {
+        console.log(response.content.toJSON());
+      }, error => {
+        console.log(error);
+      });
+    }else{
+      alert("Champs non remplis !");
+    }
+    //this.$navigateTo(BottomNav);
   },
 },
+    created:function(){
+      this.date = new Date();
+    },
   data() {
     return {
       nom: null,
       adresse: null,
       public : true,
-      date: Date(),
+      date: null,
+      description : null,
+      dateToday: Date(),
     }
   }
 }

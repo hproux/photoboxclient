@@ -15,11 +15,13 @@
 
 <script>
   import Login from "./Login.vue";
+  import BackArrow from "./BackArrow.vue";
   import Register from "./Register.vue";
 
 
   export default {
   components:{
+    BackArrow,
     Login,
   },
   data() {
