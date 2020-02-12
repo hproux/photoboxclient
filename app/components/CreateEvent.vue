@@ -9,7 +9,7 @@
             <TextView class="TextViewDescription" hint="Description"/>
           <FlexboxLayout flexDirection="row">
             <Label class="LabelPublic" text="Public"/>
-            <Switch class="switch" :checked="public"/>
+            <Switch offBackgroundColor="#614fa5" color="white" class="switch" :checked="public"/>
           </FlexboxLayout>
           <Button class="BtnCreate" text="Créer" @tap="create"/>
         </FlexboxLayout>
@@ -35,13 +35,14 @@ methods: {
       public : true,
       date: Date(),
     }
-  },
+  }
 }
 </script>
 
 <style lang="scss" scoped>
   .datePicker{
     height:25%;
+
   }
 
   .LabelPublic{
@@ -50,8 +51,6 @@ methods: {
     color : white;
   }
 
-  .switch{
-  }
 .TextViewDescription{
   margin-top:15px;
   border-color : white;
@@ -61,6 +60,7 @@ methods: {
   color : white;
   font-size: 15em;
   padding-left:10em;
+  placeholder-color: white;
 }
 
   .BtnCreate {
@@ -69,6 +69,7 @@ methods: {
     color : white;
     background-color: #614fa5 ;
     font-size: 20em;
+    margin-top: 5%;
   }
 
   .TextFieldName{
