@@ -81,7 +81,7 @@ export default {
   },
   ApiSend: function(){
     http.request({
-      url: "http://100.64.84.201/index.php/picture",
+      url: this.$store.state.urlApi+"/index.php/picture",
       method: "POST",
       headers: { "Content-Type": "application/json" },
       content: JSON.stringify({

@@ -19,6 +19,7 @@
 <script>
   import BottomNav from "./BottomNav.vue";
   import * as http from "http";
+  import formatDate from "../utils/formatDate";
   export default {
     components:{
       BottomNav,
@@ -27,12 +28,12 @@ methods: {
   create:function(){
     if(this.nom && this.adresse && this.description){
       http.request({
-        url: "http://100.64.84.201/index.php/event",
+        url: this.$store.state.urlApi+"/index.php/event",
         method: "POST",
         headers: {"Content-Type": "application/json"},
         content: JSON.stringify({
           name : this.nom,
-          date :this.date,
+          date :formatDate.dateToYearMonthDayHourMinutes(this.date),
           location :this.adresse,
           public : this.public,
           description:this.description,
@@ -50,7 +51,6 @@ methods: {
       console.log(this.$store.state.test);
       alert("Champs non remplis !");
     }
-    //this.$navigateTo(BottomNav);
   },
 },
     created:function(){

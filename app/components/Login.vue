@@ -6,8 +6,8 @@
     <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
       <Label class="LabelConnexion" text="Connexion"/>
       <Image class="LogoPhotoBox" src="~/img/logoPhotoBox.png" />
-      <TextField class="TextField TextFieldId" :text="id" hint="Identifiant"/>
-      <TextField class="TextField" secure="true" :text="password" hint="Mot de passe"/>
+      <TextField class="TextField TextFieldId" v-model="id" hint="Adresse mail"/>
+      <TextField class="TextField" secure="true" v-model="password" hint="Mot de passe"/>
 
       <Button class="Btn BtnConnexion" text="Se connecter" @tap="login"/>
       <Label class="TagRegister" @tap="register" text="Pas encore de compte ?"/>
@@ -18,7 +18,7 @@
 <script>
   import BottomNav from "./BottomNav.vue";
   import Register from "./Register.vue";
-
+  import * as http from "http";
 
   export default {
     components:{
@@ -36,8 +36,31 @@
       this.$navigateTo(Register);
     },
     login:function(){
-      this.$navigateTo(BottomNav);
-
+      if (this.id && this.password) {
+        http.request({
+          url: this.$store.state.urlApi + "/index.php/login",
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          content: JSON.stringify({
+            mail: this.id,
+            mdp: this.password,
+          })
+        }).then(response => {
+          if(response.statusCode!=200){
+            alert("L'identifiant et le mot de passe ne correspondent pas.");
+            this.id ="";
+            this.password ="";
+            return;
+          }
+          this.$store.commit('setToken', response.content.toJSON().token);
+          console.log(this.$store.state.token);
+          this.$navigateTo(BottomNav);
+        }, error => {
+          console.log(error);
+        });
+      } else {
+        alert("Champs non remplis !");
+      }
     }
   },
 }

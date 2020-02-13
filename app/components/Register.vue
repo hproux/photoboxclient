@@ -4,15 +4,15 @@
       <Label class="action-bar-title" text=""></Label>
     </ActionBar>
     <TabView tabBackgroundColor="transparent" androidSelectedTabHighlightColor="transparent" selectedTabTextColor="transparent"
-             tabTextColor="transparent" :selectedIndex="selectedIndex" @selectedIndexChange="indexChange">
+             tabTextColor="transparent" :selectedIndex="selectedIndex">
       <TabViewItem>
         <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
           <Label class="LabelInscritption" text="Inscritption"/>
           <Image class="LogoPhotoBox" src="~/img/logoPhotoBox.png"/>
-          <TextField class="TextField TextFieldName" :text="nom" hint="Nom"/>
-          <TextField class="TextField" :text="prenom" hint="Prénom"/>
+          <TextField class="TextField TextFieldName" v-model="nom" hint="Nom"/>
+          <TextField class="TextField" v-model="prenom" hint="Prénom"/>
           <Label class="TextField TextFieldBirth" text="Date de naissance"/>
-          <DatePicker :maxDate="maxDate" :date="date"/>
+          <DatePicker :maxDate="maxDate" v-model="date"/>
           <Button class="Btn BtnSuivant" text="Suivant" @tap="next"/>
         </FlexboxLayout>
       </TabViewItem>
@@ -20,10 +20,10 @@
         <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
           <Label class="LabelInscritption" text="Inscritption"/>
           <Image class="LogoPhotoBox" src="~/img/logoPhotoBox.png"/>
-          <TextField class="TextField TextFieldMobile" keyboardType="datetime" :text="mobile" hint="Téléphone"/>
-          <TextField class="TextField2" :text="mail" hint="mail"/>
-          <TextField class="TextField2" :text="password" hint="Mot de passe"/>
-          <TextField class="TextField2" :text="passwordVerif" hint="Confirmer le mot de passe"/>
+          <TextField class="TextField TextFieldMobile" keyboardType="datetime" v-model="mobile" hint="Téléphone"/>
+          <TextField class="TextField2" v-model="mail" hint="mail"/>
+          <TextField class="TextField2" secure="true" v-model="password" hint="Mot de passe"/>
+          <TextField class="TextField2" secure="true" v-model="passwordVerif" hint="Confirmer le mot de passe"/>
 
           <Button class="Btn BtnRetour" text="Retour" @tap="back"/>
           <Button class="Btn BtnRegister" text="Terminer" @tap="register"/>
@@ -37,6 +37,8 @@
 <script>
   import Login from "./Login.vue";
   import BackArrow from "./BackArrow.vue";
+  import * as http from "http";
+  import formatDate from "../utils/formatDate";
 
   export default {
     components:{
@@ -48,14 +50,31 @@ methods: {
     this.selectedIndex=1;
   },
   register:function(){
-    this.$navigateTo(Login);
+    if (this.nom && this.prenom && this.mobile && this.mail && this.password && (this.password==this.passwordVerif)) {
+      http.request({
+        url: this.$store.state.urlApi + "/index.php/user",
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        content: JSON.stringify({
+          nom: this.nom,
+          prenom: this.prenom,
+          date_naiss: formatDate.dateToYearMonthDay(this.date),
+          tel: this.mobile,
+          mail: this.mail,
+          mdp: this.password
+        })
+      }).then(response => {
+        console.log(response.content.toJSON());
+        this.$navigateTo(Login);
+      }, error => {
+        console.log(error);
+      });
+    } else {
+      alert("Champs non remplis !");
+    }
   },
   back: function () {
     this.selectedIndex = 0;
-  },
-  indexChange: function (args) {
-    this.selectedIndex = args.value
-    console.log('Current tab index: ' + this.selectedIndex)
   }
 },
   data() {
@@ -67,10 +86,13 @@ methods: {
       passwordVerif : null,
       mobile : null,
       selectedIndex : 0,
-      date: Date(),
+      date: null,
       maxDate: new Date(),
     }
   },
+    created(){
+      this.date = new Date();
+    },
 }
 </script>
 

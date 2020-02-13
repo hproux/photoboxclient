@@ -19,9 +19,12 @@ const NSVuexPersistent = store => {
 export default new Vuex.Store({
     plugins: [NSVuexPersistent],
     state: {
-        test: "test",
+        urlApi: "http://100.64.84.201",
+        token : null,
     },
     mutations: {
-
+        setToken(state, token){
+            state.token = token;
+        }
     }
 });
