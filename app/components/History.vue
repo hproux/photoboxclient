@@ -1,21 +1,31 @@
 <template lang="html">
   <Page actionBarHidden="true">
-      <ActionBar>
-          <Label text="History"></Label>
-      </ActionBar>
-
-      <GridLayout class="page__content">
-          <Label class="page__content-icon far" text.decode="&#xf1ea;"></Label>
-          <Label class="page__content-placeholder" :text="message"></Label>
-      </GridLayout>
+      <EventsList v-if="renderComponent"/>
   </Page>
 </template>
 
 <script>
-export default {
+  import EventsList from "./EventsList.vue";
+
+  export default {
+    components: {
+      EventsList
+    },
+      created(){
+        this.forceRerender();
+        },
+      methods:{
+        forceRerender:function(){
+          this.renderComponent = false;
+
+          this.$nextTick(()=>{
+              this.renderComponent = true;
+          })
+        },
+      },
     data: () => {
         return {
-            message: "<!-- History page content goes here -->"
+            renderComponent: true,
         };
     },
 }

@@ -39,10 +39,15 @@ methods: {
         })
       }).then(response => {
         console.log(response.content.toJSON());
+        this.$navigateTo(BottomNav, {
+          frame: 'Actually'
+        });
       }, error => {
+
         console.log(error);
       });
     }else{
+      console.log(this.$store.state.test);
       alert("Champs non remplis !");
     }
     //this.$navigateTo(BottomNav);

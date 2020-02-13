@@ -1,5 +1,7 @@
 <template lang="html">
-    <Home/>
+    <StackLayout>
+        <Home/>
+    </StackLayout>
 </template>
 
 <script>

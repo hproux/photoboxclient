@@ -19,6 +19,7 @@
 <script>
     import CreateEvent from "./CreateEvent.vue";
 
+
     export default {
     components: {
         CreateEvent,
@@ -26,7 +27,7 @@
     methods:{
         createEvent:function(){
             this.$navigateTo(CreateEvent);
-        },
+        }
     },
     data: () => {
         return {

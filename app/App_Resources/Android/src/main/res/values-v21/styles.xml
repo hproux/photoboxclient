@@ -5,19 +5,17 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:datePickerStyle">@style/SpinnerDatePicker</item>
         <item name="android:timePickerStyle">@style/SpinnerTimePicker</item>
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textColorSecondary">@color/white</item>
-        <item name="android:textColorPrimaryInverse">@color/white</item>
-    </style>
-    <style name="TextView" parent="android:Widget.TextView">
-        <item name="android:textColorHint">@color/white</item>
+
     </style>
     <style name="AppTheme" parent="AppThemeBase21">
     </style>
 
     <!-- Default style for DatePicker - in spinner mode -->
     <style name="SpinnerDatePicker" parent="android:Widget.Material.Light.DatePicker">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:textColorPrimaryInverse">@color/white</item>
         <item name="android:datePickerMode">spinner</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColor">#ffffff</item>
