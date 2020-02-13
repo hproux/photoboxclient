@@ -7,7 +7,10 @@
              tabTextColor="transparent" :selectedIndex="selectedIndex">
       <TabViewItem>
         <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
-          <Label class="LabelInscritption" text="Inscritption"/>
+          <FlexboxLayout class="fullWidth" flexDirection="row">
+            <BackArrow/>
+          <Label class="LabelInscritption LabelInscritption1" text="Inscritption"/>
+          </FlexboxLayout>
           <Image class="LogoPhotoBox" src="~/img/logoPhotoBox.png"/>
           <TextField class="TextField TextFieldName" v-model="nom" hint="Nom"/>
           <TextField class="TextField" v-model="prenom" hint="Prénom"/>
@@ -97,7 +100,6 @@ methods: {
 </script>
 
 <style lang="scss" scoped>
-
   .Btn {
     width: 90%;
     border-radius: 100%;
@@ -153,5 +155,9 @@ methods: {
     font-size: 20em;
     color: white;
   }
+
+.LabelInscritption1 {
+  margin-left:25%;
+}
 </style>
 

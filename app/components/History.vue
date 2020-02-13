@@ -1,6 +1,8 @@
 <template lang="html">
   <Page actionBarHidden="true">
-      <EventsList v-if="renderComponent"/>
+      <Frame>
+      <EventsList/>
+      </Frame>
   </Page>
 </template>
 
@@ -11,21 +13,10 @@
     components: {
       EventsList
     },
-      created(){
-        this.forceRerender();
-        },
       methods:{
-        forceRerender:function(){
-          this.renderComponent = false;
-
-          this.$nextTick(()=>{
-              this.renderComponent = true;
-          })
-        },
       },
     data: () => {
         return {
-            renderComponent: true,
         };
     },
 }

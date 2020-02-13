@@ -24,6 +24,11 @@ Page{
   background: linear-gradient(200deg, #BD5DCD,#824AA7,#604591,#3F2D86,#362472);
 }
 
+.fullWidth{
+    width:100%;
+    backgroud-color:red;
+}
+
 Label, Button, TextField{
     font-family: Calibri;
 }

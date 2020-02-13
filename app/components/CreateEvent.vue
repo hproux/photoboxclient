@@ -1,7 +1,10 @@
 <template lang="html">
   <Page>
         <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
-          <Label class="LabelMain" text="Créer un événement"/>
+          <FlexboxLayout class="fullWidth" flexDirection="row">
+            <BackArrow/>
+            <Label class="LabelMain" text="Créer un événement"/>
+          </FlexboxLayout>
           <TextField class="TextField TextFieldName" v-model="nom" hint="Nom"/>
           <TextField class="TextField" v-model="adresse" hint="Adresse"/>
           <Label class="TextField TextFieldDate" text="Date de l'événement"/>
@@ -18,11 +21,13 @@
 
 <script>
   import BottomNav from "./BottomNav.vue";
+  import BackArrow from "./BackArrow.vue";
   import * as http from "http";
   import formatDate from "../utils/formatDate";
   export default {
     components:{
       BottomNav,
+      BackArrow
     },
 methods: {
   create:function(){
@@ -70,11 +75,10 @@ methods: {
 </script>
 
 <style lang="scss" scoped>
-  .datePicker{
-    height:25%;
 
+  .datePicker {
+    height: 25%;
   }
-
   .LabelPublic{
     font-size: 17em;
     margin-top:2%;
@@ -121,6 +125,7 @@ methods: {
 
   .LabelMain {
     margin-top : 3%;
+    margin-left:15%;
     font-size: 20em;
     color: white;
   }

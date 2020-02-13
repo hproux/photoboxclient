@@ -1,9 +1,5 @@
 <template lang="html">
-  <Page>
-    <AbsoluteLayout>
       <Image class="backArrow" @tap="Back" src="~/img/left-arrow.png" stretch="none"/>
-    </AbsoluteLayout>
-  </Page>
 </template>
 
 <script>
@@ -18,10 +14,10 @@ methods: {
 </script>
 
 <style lang="scss" scoped>
+
 .backArrow{
+      margin-top:1%;
 
 }
-
-
 </style>
 

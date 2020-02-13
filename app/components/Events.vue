@@ -1,6 +1,6 @@
 <template lang="html">
   <Page actionBarHidden="true">
-    <TabView tabBackgroundColor="transparent" androidSelectedTabHighlightColor="white" selectedTabTextColor="white" tabTextColor="#CCCCCC" :selectedIndex="selectedIndex" @selectedIndexChange="indexChange">
+    <TabView tabBackgroundColor="transparent" androidSelectedTabHighlightColor="white" selectedTabTextColor="white" tabTextColor="#CCCCCC">
       <TabViewItem title="Privé">
         <Label text="évènements privés" />
       </TabViewItem>
@@ -13,12 +13,6 @@
 
 <script>
 export default {
-  methods: {
-    indexChange: function(args) {
-        let newIndex = args.value
-        console.log('Current tab index: ' + newIndex)
-    }
-  }
 }
 </script>
 

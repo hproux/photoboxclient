@@ -54,15 +54,22 @@ import Actually from "./Actually.vue";
 import Profile from "./Profile.vue";
 
 export default {
+    created(){
+    },
+    methods:{
+    },
+    data: () => {
+        return {
+        };
+    },
   components: {
     History,
     Events,
     Actually,
-    Profile
+    Profile,
   }
 };
 </script>
 
 <style lang="scss" scoped>
-
 </style>

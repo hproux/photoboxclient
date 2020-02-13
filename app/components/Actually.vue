@@ -1,11 +1,16 @@
 <template lang="html">
     <Page actionBarHidden="true">
         <TabView tabBackgroundColor="transparent" androidSelectedTabHighlightColor="white" selectedTabTextColor="white"
-                 tabTextColor="#CCCCCC" :selectedIndex="selectedIndex" @selectedIndexChange="indexChange">
+                 tabTextColor="#CCCCCC">
             <TabViewItem class="TabViewElems" title="Evénements organisés">
                 <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
-                    <Label class="LabelEvents" :text="LabelEvents"/>
-                    <!--Ajouter ici la liste des évènements-->
+                        <Label class="LabelEvents" :text="LabelEvents"/>
+
+
+                    <Frame>
+                        <EventsList class="liste"/>
+                    </Frame>
+
                     <Button class="BtnCreate" text="+ Créer" @tap="createEvent"/>
                 </FlexboxLayout>
             </TabViewItem>
@@ -13,16 +18,19 @@
                 <Label text="Mes événements"/>
             </TabViewItem>
         </TabView>
+
     </Page>
 </template>
 
 <script>
     import CreateEvent from "./CreateEvent.vue";
+    import EventsList from "./EventsList.vue";
 
 
     export default {
     components: {
         CreateEvent,
+        EventsList,
     },
     methods:{
         createEvent:function(){
@@ -39,13 +47,13 @@
 
 <style lang="scss" scoped>
 .BtnCreate{
-    display: block;
     width: 25%;
     color: white;
-    background-color: transparent;
+    background-color: #824AA7;
     border-color: white;
     border-width: 3px;
     border-radius: 40px;
+    font-size:15em;
     height: 30em;
 }
 
@@ -59,4 +67,9 @@
 .TabViewElems{
     font-size:12em;
 }
+
+    .liste{
+        height:70%;
+    }
+
 </style>

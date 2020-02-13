@@ -17,7 +17,7 @@
     "nativescript-gradient": "^2.0.1",
     "nativescript-vue": "~2.4.0",
     "nativescript-vuex-persistent": "^1.2.0",
-    "tns-core-modules": "~6.3.0",
+    "tns-core-modules": "^6.3.2",
     "vuex": "^3.1.2"
   },
   "devDependencies": {

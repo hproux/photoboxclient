@@ -1,7 +1,7 @@
 <template lang="html">
   <Page actionBarHidden="true">
     <StackLayout>
-      <ListView height="800" for="item in items">
+      <ListView height="1500" for="item in items">
         <v-template>
           <FlexboxLayout class="item" alignItems="center" alignContent="center" flexDirection="row">
             <Image class="ImgEvent" src="~/img/user.png"/>
@@ -76,7 +76,7 @@
   font-size:17em;
 }
   .item{
-    background-color: transparent;
+    background-color: black;
     padding-top: -80px;
     padding-bottom: -50px;
   }

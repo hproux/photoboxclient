@@ -36,7 +36,8 @@
       this.$navigateTo(Register);
     },
     login:function(){
-      if (this.id && this.password) {
+      this.$navigateTo(BottomNav);
+      /*if (this.id && this.password) {
         http.request({
           url: this.$store.state.urlApi + "/index.php/login",
           method: "POST",
@@ -60,7 +61,7 @@
         });
       } else {
         alert("Champs non remplis !");
-      }
+      }*/
     }
   },
 }
