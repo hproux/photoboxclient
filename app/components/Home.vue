@@ -23,6 +23,7 @@
   components:{
     BackArrow,
     Login,
+    Register,
   },
   data() {
     return {
@@ -30,10 +31,10 @@
   },
   methods: {
     login:function(){
-      this.$navigateTo(Login);
+      this.$navigator.navigate('/login', {clearHistory: false})
     },
     register:function(){
-      this.$navigateTo(Register);
+      this.$navigator.navigate('/register', {clearHistory: false})
     }
   },
 }

@@ -1,9 +1,10 @@
 import Vue from 'nativescript-vue';
 import Vuex from 'vuex';
+
+Vue.use(Vuex);
 import localStorage from 'nativescript-localstorage';
 import * as ApplicationSettings from "application-settings";
 
-Vue.use(Vuex);
 const NSVuexPersistent = store => {
     // Init hook.
     let storageStr = localStorage.getItem('ns-vuex-persistent');

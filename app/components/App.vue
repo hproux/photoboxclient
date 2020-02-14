@@ -1,7 +1,5 @@
 <template lang="html">
-    <StackLayout>
-        <Home/>
-    </StackLayout>
+    <Navigator :defaultRoute="'/home'"/>
 </template>
 
 <script>

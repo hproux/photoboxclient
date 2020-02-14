@@ -45,9 +45,8 @@ methods: {
         })
       }).then(response => {
         console.log(response.content.toJSON());
-        this.$navigateTo(BottomNav, {
-          frame: 'Actually'
-        });
+        this.$navigator.navigate('/bottomnav', {clearHistory: false})
+
       }, error => {
 
         console.log(error);

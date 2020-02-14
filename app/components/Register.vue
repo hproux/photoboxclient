@@ -68,7 +68,7 @@ methods: {
         })
       }).then(response => {
         console.log(response.content.toJSON());
-        this.$navigateTo(Login);
+        this.$navigator.navigate('/login', {clearHistory: true})
       }, error => {
         console.log(error);
       });

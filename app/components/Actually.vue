@@ -34,7 +34,7 @@
     },
     methods:{
         createEvent:function(){
-            this.$navigateTo(CreateEvent);
+            this.$navigator.navigate('/createevent', {clearHistory: false})
         }
     },
     data: () => {

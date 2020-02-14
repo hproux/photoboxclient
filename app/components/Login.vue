@@ -19,7 +19,6 @@
   import BottomNav from "./BottomNav.vue";
   import Register from "./Register.vue";
   import * as http from "http";
-
   export default {
     components:{
       BottomNav,
@@ -33,10 +32,12 @@
   },
   methods: {
     register:function(){
-      this.$navigateTo(Register);
+      this.$navigator.navigate('/register', {clearHistory: false})
+
     },
     login:function(){
-      this.$navigateTo(BottomNav);
+      this.$navigator.navigate('/bottomnav', {clearHistory: true})
+
       /*if (this.id && this.password) {
         http.request({
           url: this.$store.state.urlApi + "/index.php/login",
@@ -54,8 +55,7 @@
             return;
           }
           this.$store.commit('setToken', response.content.toJSON().token);
-          console.log(this.$store.state.token);
-          this.$navigateTo(BottomNav);
+          this.$navigator.navigate('/bottomnav', {clearHistory: true})
         }, error => {
           console.log(error);
         });
