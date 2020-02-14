@@ -1,13 +1,12 @@
 <template lang="html">
     <Page actionBarHidden="true">
-        <TabView tabBackgroundColor="transparent" androidSelectedTabHighlightColor="white" selectedTabTextColor="white"
+        <TabView class="bg" tabBackgroundColor="transparent" androidSelectedTabHighlightColor="white" selectedTabTextColor="white"
                  tabTextColor="#CCCCCC">
             <TabViewItem class="TabViewElems" title="Evénements organisés">
-
                 <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
                         <Label class="LabelEvents" :text="LabelEvents"/>
                     <Frame>
-                        <EventsList class="liste"/>
+                        <EventsList height="200px" class="liste"/>
                     </Frame>
                     <Button class="BtnCreate" text="+ Créer" @tap="createEvent"/>
                 </FlexboxLayout>
@@ -23,11 +22,7 @@
     import CreateEvent from "./CreateEvent.vue";
     import EventsList from "./EventsList.vue";
 
-
     export default {
-        created(){
-
-        },
     components: {
         CreateEvent,
         EventsList,
@@ -41,11 +36,14 @@
         return {
             LabelEvents:"Vous organisez n événements",
         };
-    }
-}
+    },
+ }
 </script>
 
 <style lang="scss">
+    .bg{
+        background: linear-gradient(200deg, #BD5DCD, #824AA7, #604591, #3F2D86, #362472);
+    }
 .BtnCreate{
     width: 25%;
     color: white;

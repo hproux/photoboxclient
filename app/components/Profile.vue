@@ -14,9 +14,7 @@
             <TextField horizontalAlignment="center" class="LabelItem" v-model="tel"/>
             <TextField horizontalAlignment="center" class="LabelItem" v-model="mail"/>
             <Button class="BtnSave" text="Sauvegarder" @tap="save"/>
-
         </StackLayout>
-
     </Page>
 </template>
 
