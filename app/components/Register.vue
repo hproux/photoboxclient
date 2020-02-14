@@ -67,8 +67,8 @@ methods: {
           mdp: this.password
         })
       }).then(response => {
-        console.log(response.content.toJSON());
-        this.$navigator.navigate('/login', {clearHistory: true})
+        //console.log(response.content.toJSON());
+        this.$navigateTo(Login);
       }, error => {
         console.log(error);
       });

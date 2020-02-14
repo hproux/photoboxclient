@@ -1,9 +1,9 @@
 import Vue from 'nativescript-vue';
 import Vuex from 'vuex';
-
-Vue.use(Vuex);
 import localStorage from 'nativescript-localstorage';
 import * as ApplicationSettings from "application-settings";
+
+Vue.use(Vuex);
 
 const NSVuexPersistent = store => {
     // Init hook.
@@ -22,10 +22,12 @@ export default new Vuex.Store({
     state: {
         urlApi: "http://100.64.84.201",
         token : null,
+        memberInfos : null,
     },
     mutations: {
-        setToken(state, token){
-            state.token = token;
+        setMemberInfos(state, content){
+            state.token = content.token;
+            state.memberInfos = content;
         }
     }
 });

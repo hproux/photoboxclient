@@ -32,13 +32,11 @@
   },
   methods: {
     register:function(){
-      this.$navigator.navigate('/register', {clearHistory: false})
+      this.$navigateTo(Register);
 
     },
     login:function(){
-      this.$navigator.navigate('/bottomnav', {clearHistory: true})
-
-      /*if (this.id && this.password) {
+      if (this.id && this.password) {
         http.request({
           url: this.$store.state.urlApi + "/index.php/login",
           method: "POST",
@@ -54,14 +52,14 @@
             this.password ="";
             return;
           }
-          this.$store.commit('setToken', response.content.toJSON().token);
-          this.$navigator.navigate('/bottomnav', {clearHistory: true})
+          this.$store.commit('setMemberInfos', response.content.toJSON());
+          this.$navigateTo(BottomNav);
         }, error => {
           console.log(error);
         });
       } else {
         alert("Champs non remplis !");
-      }*/
+      }
     }
   },
 }

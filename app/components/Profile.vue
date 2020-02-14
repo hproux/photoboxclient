@@ -6,9 +6,7 @@
            <Label horizontalAlignment="center" class="LabelItem" v-model="LabelNom"/>
            <Label horizontalAlignment="center" class="LabelItem" v-model="tel"/>
            <Label horizontalAlignment="center" class="LabelItem" v-model="mail"/>
-           <Label horizontalAlignment="center" class="LabelItem" v-model="dateNaiss"/>
-           <Label horizontalAlignment="center" class="LabelItem LabelLast" v-model="grade"/>
-
+           <Label horizontalAlignment="center" class="LabelItem LabelLast" v-model="dateNaiss"/>
        </StackLayout>
 
     </Page>
@@ -16,13 +14,12 @@
 
 <script>
 export default {
-    data: () => {
+    data: function() {
         return {
-            LabelNom : "Nom et Prénom",
-            tel : "0654875465",
-            mail : "test",
-            dateNaiss : "13/09/1995",
-            grade : "modérateur",
+            LabelNom : this.$store.state.memberInfos.nom +" "+ this.$store.state.memberInfos.prenom,
+            tel : this.$store.state.memberInfos.tel,
+            mail : this.$store.state.memberInfos.mail,
+            dateNaiss : this.$store.state.memberInfos.date_naiss,
 
         };
     }
@@ -32,14 +29,14 @@ export default {
 <style lang="scss" scoped>
     .ImgEdit{
         margin-right:5%;
-        margin-top:3%;
+        margin-top:5%;
         width:128px;
     }
 
     .ImgEvent {
         border-radius: 100%;
         margin-top:5%;
-        margin-bottom: 5%;
+        margin-bottom: 7%;
         width: 400px;
         background-color: white;
     }
