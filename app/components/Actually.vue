@@ -28,6 +28,9 @@
 
 
     export default {
+        created(){
+
+        },
     components: {
         CreateEvent,
         EventsList,
