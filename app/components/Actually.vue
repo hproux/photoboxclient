@@ -3,14 +3,12 @@
         <TabView tabBackgroundColor="transparent" androidSelectedTabHighlightColor="white" selectedTabTextColor="white"
                  tabTextColor="#CCCCCC">
             <TabViewItem class="TabViewElems" title="Evénements organisés">
+
                 <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
                         <Label class="LabelEvents" :text="LabelEvents"/>
-
-
                     <Frame>
                         <EventsList class="liste"/>
                     </Frame>
-
                     <Button class="BtnCreate" text="+ Créer" @tap="createEvent"/>
                 </FlexboxLayout>
             </TabViewItem>
@@ -18,7 +16,6 @@
                 <Label text="Mes événements"/>
             </TabViewItem>
         </TabView>
-
     </Page>
 </template>
 
@@ -48,7 +45,7 @@
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .BtnCreate{
     width: 25%;
     color: white;
