@@ -1,7 +1,6 @@
 import Vue from 'nativescript-vue';
 import Vuex from 'vuex';
 import localStorage from 'nativescript-localstorage';
-import * as ApplicationSettings from "application-settings";
 
 Vue.use(Vuex);
 
@@ -20,7 +19,7 @@ const NSVuexPersistent = store => {
 export default new Vuex.Store({
     plugins: [NSVuexPersistent],
     state: {
-        urlApi: "http://100.64.84.201",
+        urlApi: "https://100.64.84.201",
         token : null,
         memberInfos : null,
     },
