@@ -19,7 +19,6 @@ const NSVuexPersistent = store => {
 export default new Vuex.Store({
     plugins: [NSVuexPersistent],
     state: {
-        urlApi: "https://100.64.84.201",
         token : null,
         memberInfos : null,
     },

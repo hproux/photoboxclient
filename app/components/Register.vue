@@ -40,9 +40,15 @@
 <script>
   import Login from "./Login.vue";
   import BackArrow from "./BackArrow.vue";
-  import * as http from "http";
   import formatDate from "../utils/formatDate";
-
+  const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
+  const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
+  const loader = new LoadingIndicator();
+  const options = {
+    message: "Création du compte",
+    details: 'Veuillez patienter...',
+    userInteractionEnabled: false,
+  };
   export default {
     components:{
       BackArrow,
@@ -53,24 +59,22 @@ methods: {
     this.selectedIndex=1;
   },
   register:function(){
-    if (this.nom && this.prenom && this.mobile && this.mail && this.password && (this.password==this.passwordVerif)) {
-      http.request({
-        url: this.$store.state.urlApi + "/index.php/user",
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        content: JSON.stringify({
-          nom: this.nom,
-          prenom: this.prenom,
-          date_naiss: formatDate.dateToYearMonthDay(this.date),
-          tel: this.mobile,
-          mail: this.mail,
-          mdp: this.password
-        })
-      }).then(response => {
-        //console.log(response.content.toJSON());
-        this.$navigateTo(Login);
-      }, error => {
-        console.log(error);
+    let that = this;
+    if (that.nom && that.prenom && that.mobile && that.mail && that.password && (that.password==that.passwordVerif)) {
+      loader.show(options);
+      that.$axios.post("user", {
+        nom: that.nom,
+        prenom: that.prenom,
+        date_naiss: formatDate.dateToYearMonthDay(that.date),
+        tel: that.mobile,
+        mail: that.mail,
+        mdp: that.password
+      }).then((response) => {
+        console.log(response.data);
+        that.$navigateTo(Login);
+      }).catch((err) => {
+        console.log(err.response.request._response);
+        loader.hide();
       });
     } else {
       alert("Champs non remplis !");

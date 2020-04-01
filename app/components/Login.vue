@@ -16,9 +16,23 @@
 </template>
 
 <script>
+  import {decode, encode} from 'base-64'
+  if (!global.btoa) {
+    global.btoa = encode;
+  }
+  if (!global.atob) {
+    global.atob = decode;
+  }
   import BottomNav from "./BottomNav.vue";
   import Register from "./Register.vue";
-  import * as http from "http";
+  const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
+  const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
+  const loader = new LoadingIndicator();
+  const options = {
+    message: "Connexion au compte",
+    details: 'Veuillez patienter...',
+    userInteractionEnabled: false,
+  };
   export default {
     components:{
       BottomNav,
@@ -36,26 +50,27 @@
 
     },
     login:function(){
-      if (this.id && this.password) {
-        http.request({
-          url: this.$store.state.urlApi + "/index.php/login",
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          content: JSON.stringify({
-            mail: this.id,
-            mdp: this.password,
-          })
+      let that = this;
+      if (that.id && that.password) {
+        //loader.show(options);
+        that.$axios.post("login", {},{
+          auth : {
+            username: that.id,
+            password: that.password,
+          }
         }).then(response => {
+          console.log(response);
+          //loader.hide();
           if(response.statusCode!=200){
             alert("L'identifiant et le mot de passe ne correspondent pas.");
-            this.id ="";
-            this.password ="";
+            that.id ="";
+            that.password ="";
             return;
           }
-          this.$store.commit('setMemberInfos', response.content.toJSON());
-          this.$navigateTo(BottomNav);
-        }, error => {
-          console.log(error);
+          that.$store.commit('setMemberInfos', response.data.toJSON());
+          that.$navigateTo(BottomNav);
+        }).catch((err) => {
+          console.log(err.response.request._response);
         });
       } else {
         alert("Champs non remplis !");
