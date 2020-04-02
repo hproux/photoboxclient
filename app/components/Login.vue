@@ -45,14 +45,14 @@
     }
   },
   methods: {
-    register:function(){
+    register(){
       this.$navigateTo(Register);
 
     },
-    login:function(){
+    login(){
       let that = this;
       if (that.id && that.password) {
-        //loader.show(options);
+        loader.show(options);
         that.$axios.post("login", {},{
           auth : {
             username: that.id,
@@ -60,17 +60,20 @@
           }
         }).then(response => {
           console.log(response);
-          //loader.hide();
-          if(response.statusCode!=200){
-            alert("L'identifiant et le mot de passe ne correspondent pas.");
-            that.id ="";
-            that.password ="";
-            return;
-          }
-          that.$store.commit('setMemberInfos', response.data.toJSON());
+          loader.hide();
+          that.$store.commit('setMemberInfos', response.data);
+          that.$axios.defaults.headers.Authorization = 'Bearer ' + response.data.token;
           that.$navigateTo(BottomNav);
         }).catch((err) => {
           console.log(err.response.request._response);
+          loader.hide();
+          if(err.response.status==401){
+            alert("L'identifiant et le mot de passe ne correspondent pas.");
+            that.password ="";
+            return;
+          }else{
+            alert("Une erreur est survenue");
+          }
         });
       } else {
         alert("Champs non remplis !");

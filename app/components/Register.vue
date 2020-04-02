@@ -55,14 +55,18 @@
       Login,
     },
 methods: {
-  next:function(){
+  next(){
     this.selectedIndex=1;
   },
-  register:function(){
+  register(){
     let that = this;
-    if (that.nom && that.prenom && that.mobile && that.mail && that.password && (that.password==that.passwordVerif)) {
+    if(that.password!=that.passwordVerif){
+      alert("Les mots de passes ne correspondent pas !");
+      return;
+    }
+    if (that.nom && that.prenom && that.mobile && that.mail && that.password) {
       loader.show(options);
-      that.$axios.post("user", {
+      that.$axios.post("register", {
         nom: that.nom,
         prenom: that.prenom,
         date_naiss: formatDate.dateToYearMonthDay(that.date),
@@ -70,10 +74,11 @@ methods: {
         mail: that.mail,
         mdp: that.password
       }).then((response) => {
-        console.log(response.data);
+        loader.hide();
+        console.log(response);
         that.$navigateTo(Login);
       }).catch((err) => {
-        console.log(err.response.request._response);
+        console.log(err);
         loader.hide();
       });
     } else {

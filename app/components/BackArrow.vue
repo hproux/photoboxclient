@@ -6,7 +6,7 @@
 
   export default {
 methods: {
-  Back:function(){
+  Back(){
     this.$navigateBack();
   },
 }

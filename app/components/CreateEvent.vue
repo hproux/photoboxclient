@@ -22,42 +22,46 @@
 <script>
   import BottomNav from "./BottomNav.vue";
   import BackArrow from "./BackArrow.vue";
-  import * as http from "http";
   import formatDate from "../utils/formatDate";
+  const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
+  const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
+  const loader = new LoadingIndicator();
+  const options = {
+    message: "Création de l'évènement",
+    details: 'Veuillez patienter...',
+    userInteractionEnabled: false,
+  };
   export default {
     components:{
       BottomNav,
       BackArrow
     },
 methods: {
-  create:function(){
-    if(this.nom && this.adresse && this.description){
-      http.request({
-        url: this.$store.state.urlApi+"/index.php/event",
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        content: JSON.stringify({
-          name : this.nom,
-          date :formatDate.dateToYearMonthDayHourMinutes(this.date),
-          location :this.adresse,
-          public : this.public,
-          description:this.description,
-        })
-      }).then(response => {
-        console.log(response.content.toJSON());
-        this.$navigateTo(BottomNav);
-
-      }, error => {
-
-        console.log(error);
-      });
+  create(){
+    let that = this;
+    if(that.nom && that.adresse && that.description){
+      loader.show(options);
+      that.$axios.post("event", {
+        name : that.nom,
+        date :formatDate.dateToYearMonthDayHourMinutes(that.date),
+        location :that.adresse,
+        public : that.public,
+        description:that.description
+      }).then((response) => {
+        loader.hide();
+        console.log(response.data);
+        that.$navigateTo(BottomNav);
+      }).catch((err) => {
+        console.log(err.response.request._response);
+        loader.hide();
+        alert("Une erreur est survenue");
+      })
     }else{
-      console.log(this.$store.state.test);
       alert("Champs non remplis !");
     }
   },
 },
-    created:function(){
+    created(){
       this.date = new Date();
     },
   data() {

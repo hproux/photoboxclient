@@ -28,11 +28,11 @@
         EventsList,
     },
     methods:{
-        createEvent:function(){
+        createEvent(){
             this.$navigateTo(CreateEvent);
         }
     },
-    data: () => {
+    data(){
         return {
             LabelEvents:"Vous organisez n événements",
         };

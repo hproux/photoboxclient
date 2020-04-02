@@ -5,7 +5,7 @@ import axios from 'axios';
 import App from "./components/App";
 const connectivity = require("connectivity");
 export const base = axios.create({
-    baseURL: 'https://apiphotobox.tallium.tech/index.php/',
+    baseURL: 'https://apiphotobox.tallium.tech/',
     headers: {
         'Authorization' : ''
     }

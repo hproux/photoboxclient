@@ -21,10 +21,10 @@
 <script>
 export default {
     methods:{
-      edit:function(){
+      edit(){
           this.isEdit = false;
       },
-      save:function(){
+      save(){
           if(this.LabelNom && this.tel && this.mail){
 
               this.isEdit = true;
@@ -33,7 +33,7 @@ export default {
           }
       },
     },
-    data: function() {
+    data() {
         return {
             LabelNom : this.$store.state.memberInfos.nom +" "+ this.$store.state.memberInfos.prenom,
             tel : this.$store.state.memberInfos.tel,

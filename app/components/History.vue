@@ -15,7 +15,7 @@
     },
       methods:{
       },
-    data: () => {
+    data() {
         return {
         };
     },

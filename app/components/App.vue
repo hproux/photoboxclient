@@ -4,7 +4,6 @@
 
 <script>
 import Home from "./Home.vue";
-import * as ApplicationSettings from "application-settings";
 
 export default {
   components: {

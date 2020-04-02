@@ -33,12 +33,18 @@
 </template>
 
 <script>
-import * as http from "http";
-import { EventData, Observable, fromObject } from "tns-core-modules/data/observable";
-import { Page } from "tns-core-modules/ui/page";
-import { View } from 'tns-core-modules/ui/core/view';
+
 import { takePicture, requestPermissions } from "nativescript-camera";
 import {ImageSource} from "@nativescript/core";
+const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
+const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
+const loader = new LoadingIndicator();
+const options = {
+  message: "Envoi de la photo",
+  details: 'Veuillez patienter...',
+  userInteractionEnabled: false,
+};
+
 export default {
   data() {
     return {
@@ -79,19 +85,19 @@ export default {
       this.isThereImg = true;
     }
   },
-  ApiSend: function(){
-    http.request({
-      url: this.$store.state.urlApi+"/index.php/picture",
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      content: JSON.stringify({
-        picture: this.base64,
-      })
-    }).then(response => {
-      console.log(response);
-    }, error => {
-      console.log(error);
-    });
+  ApiSend(){
+    loader.show(options);
+    let that = this;
+    that.$axios.post("picture", {
+      picture: this.base64,
+    }).then((response) => {
+      console.log(response.data);
+      loader.hide();
+    }).catch((err) => {
+      console.log(err.response.request._response);
+      loader.hide();
+      alert("Une erreur est survenue");
+    })
   }
 }
 };

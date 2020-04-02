@@ -58,7 +58,7 @@ export default {
     },
     methods:{
     },
-    data: () => {
+    data() {
         return {
         };
     },
