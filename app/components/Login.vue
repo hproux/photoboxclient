@@ -59,7 +59,7 @@
             password: that.password,
           }
         }).then(response => {
-          console.log(response);
+          //console.log(response);
           loader.hide();
           that.$store.commit('setMemberInfos', response.data);
           that.$axios.defaults.headers.Authorization = 'Bearer ' + response.data.token;

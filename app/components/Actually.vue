@@ -21,7 +21,16 @@
 <script>
     import CreateEvent from "./CreateEvent.vue";
     import EventsList from "./EventsList.vue";
-
+    import formatDate from "../utils/formatDate";
+    import BottomNav from "./BottomNav";
+    const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
+    const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
+    const loader = new LoadingIndicator();
+    const options = {
+        message: "Chargement des évènements",
+        details: 'Veuillez patienter...',
+        userInteractionEnabled: false,
+    };
     export default {
     components: {
         CreateEvent,
@@ -35,8 +44,24 @@
     data(){
         return {
             LabelEvents:"Vous organisez n événements",
+            eventsList:null,
         };
     },
+     created(){
+        let that = this;
+        loader.show(options);
+         that.$axios.get("events/involved")
+             .then((response) => {
+             loader.hide();
+             console.log(response.data);
+             that.eventsList = response.data;
+
+         }).catch((err) => {
+             console.log(err.response.request._response);
+             loader.hide();
+             alert("Une erreur est survenue");
+         })
+      },
  }
 </script>
 
