@@ -24,7 +24,8 @@
           <Label class="LabelInscritption" text="Inscritption"/>
           <Image class="LogoPhotoBox" src="~/img/logoPhotoBox.png"/>
           <TextField class="TextField TextFieldMobile" keyboardType="datetime" v-model="mobile" hint="Téléphone"/>
-          <TextField class="TextField2" v-model="mail" hint="mail"/>
+          <TextField class="TextField2" v-model="pseudo" hint="Pseudo"/>
+          <TextField class="TextField2" v-model="mail" hint="Mail"/>
           <TextField class="TextField2" secure="true" v-model="password" hint="Mot de passe"/>
           <TextField class="TextField2" secure="true" v-model="passwordVerif" hint="Confirmer le mot de passe"/>
 
@@ -64,11 +65,12 @@ methods: {
       alert("Les mots de passes ne correspondent pas !");
       return;
     }
-    if (that.nom && that.prenom && that.mobile && that.mail && that.password) {
+    if (that.nom && that.pseudo && that.prenom && that.mobile && that.mail && that.password) {
       loader.show(options);
       that.$axios.post("register", {
         nom: that.nom,
         prenom: that.prenom,
+        pseudo: that.pseudo,
         date_naiss: formatDate.dateToYearMonthDay(that.date),
         tel: that.mobile,
         mail: that.mail,
@@ -94,6 +96,7 @@ methods: {
       nom: null,
       prenom: null,
       mail : null,
+      pseudo : null,
       password : null,
       passwordVerif : null,
       mobile : null,
@@ -127,7 +130,7 @@ methods: {
   }
 
   .TextFieldMobile{
-    margin-top:10%;
+    margin-top:5%;
   }
 
   .TextField {
