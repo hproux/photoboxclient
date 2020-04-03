@@ -15,7 +15,7 @@
           <TextField class="TextField TextFieldName" v-model="nom" hint="Nom"/>
           <TextField class="TextField" v-model="prenom" hint="Prénom"/>
           <Label class="TextField TextFieldBirth" text="Date de naissance"/>
-          <DatePicker :maxDate="maxDate" v-model="date"/>
+          <DatePicker class="datePicker" :maxDate="maxDate" v-model="date"/>
           <Button class="Btn BtnSuivant" text="Suivant" @tap="next"/>
         </FlexboxLayout>
       </TabViewItem>
@@ -171,5 +171,9 @@ methods: {
 .LabelInscritption1 {
   margin-left:25%;
 }
+  .datePicker{
+    color:white;
+    placeholder-color:white;
+  }
 </style>
 

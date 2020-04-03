@@ -17,8 +17,6 @@
   import Login from "./Login.vue";
   import BackArrow from "./BackArrow.vue";
   import Register from "./Register.vue";
-  import * as ApplicationSettings from "application-settings";
-
 
   export default {
   components:{

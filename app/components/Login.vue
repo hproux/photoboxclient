@@ -6,7 +6,7 @@
     <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
       <Label class="LabelConnexion" text="Connexion"/>
       <Image class="LogoPhotoBox" src="~/img/logoPhotoBox.png" />
-      <TextField class="TextField TextFieldId" v-model="id" hint="Adresse mail"/>
+      <TextField class="TextField TextFieldId" keyboardType="email" v-model="id" hint="Adresse mail"/>
       <TextField class="TextField" secure="true" v-model="password" hint="Mot de passe"/>
 
       <Button class="Btn BtnConnexion" text="Se connecter" @tap="login"/>

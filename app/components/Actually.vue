@@ -6,7 +6,7 @@
                 <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
                         <Label class="LabelEvents" :text="LabelEvents"/>
                     <Frame>
-                        <EventsList height="200px" class="liste"/>
+                        <EventsList height="80%"/>
                     </Frame>
                     <Button class="BtnCreate" text="+ Créer" @tap="createEvent"/>
                 </FlexboxLayout>
@@ -21,8 +21,6 @@
 <script>
     import CreateEvent from "./CreateEvent.vue";
     import EventsList from "./EventsList.vue";
-    import formatDate from "../utils/formatDate";
-    import BottomNav from "./BottomNav";
     const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
     const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
     const loader = new LoadingIndicator();
@@ -44,19 +42,31 @@
     data(){
         return {
             LabelEvents:"Vous organisez n événements",
-            eventsList:null,
+            involvedEventsList:null,
+            myEventsList:null,
         };
     },
      created(){
         let that = this;
         loader.show(options);
+        //Involved events
          that.$axios.get("events/involved")
              .then((response) => {
-             loader.hide();
-             console.log(response.data);
-             that.eventsList = response.data;
+                 console.log(response.data);
+                 that.involvedEventsList = response.data;
 
-         }).catch((err) => {
+             }).catch((err) => {
+             console.log(err.response.request._response);
+             alert("Une erreur est survenue");
+         })
+         //My Events
+         that.$axios.get("events/created")
+             .then((response) => {
+                 loader.hide();
+                 console.log(response.data);
+                 that.involvedEventsList = response.data;
+
+             }).catch((err) => {
              console.log(err.response.request._response);
              loader.hide();
              alert("Une erreur est survenue");
@@ -90,9 +100,5 @@
 .TabViewElems{
     font-size:12em;
 }
-
-    .liste{
-        height:70%;
-    }
 
 </style>
