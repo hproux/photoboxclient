@@ -20,7 +20,7 @@ export default new Vuex.Store({
     plugins: [NSVuexPersistent],
     state: {
         token : null,
-        memberInfos : null,
+        memberInfos : null
     },
     mutations: {
         setMemberInfos(state, content){

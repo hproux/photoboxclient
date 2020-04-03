@@ -1,19 +1,30 @@
 <template lang="html">
   <Page actionBarHidden="true">
     <StackLayout>
-      <ListView for="item in items">
+    <!--<Label if="list" :text="list"/>
+
+      <ListView for="item in list">
+        <v-template>
+          <StackLayout>
+
+              <Label :text="item.name"/>
+            </StackLayout>
+        </v-template>
+      </ListView>-->
+     
+      <ListView class="list" for="item in list">
         <v-template>
           <FlexboxLayout class="item" alignItems="center" alignContent="center" flexDirection="row">
             <Image class="ImgEvent" src="~/img/user.png"/>
             <StackLayout>
                 <FlexboxLayout justifyContent="space-between" flexDirection="row">
-                  <Label class="LabelItem" :text="item.nom"/>
+                  <Label class="LabelItem" :text="item.name"/>
                   <Label class="LabelItem LabelEtat" text="inscrit"/>
                 </FlexboxLayout>
               <FlexboxLayout class="fullWidth" justifyContent="space-between" flexDirection="row">
                 <FlexboxLayout flexDirection="row">
                   <Image class="ImgPin" src="~/img/pin.png"/>
-                  <Label class="LabelItem" :text="item.lieu"/>
+                  <Label class="LabelItem" :text="item.location"/>
                 </FlexboxLayout>
                 <Label class="LabelItem" :text="item.date"/>
               </FlexboxLayout>
@@ -28,6 +39,8 @@
 <script>
 
   export default {
+    props: ['list'],
+
     data() {
       return {
         items:[
@@ -49,10 +62,15 @@
           {"nom": "ParkWay Drive", "lieu": "La Cale", "date": "21-01-2019"},
 
         ]
-      }},
+      }
+    },
 
   methods: {
 
+  },
+
+  mounted(){
+    //console.log("lsite : " + this.list);
   }
 }
 </script>
@@ -81,5 +99,8 @@
     padding-bottom: -50px;
   }
 
+   .list{
+    height: 100%;
+  }
 </style>
 
