@@ -28,7 +28,7 @@
   import EventDetail from "./EventDetail";
 
   export default {
-    props: ['list'],
+    props: ['list', 'isPublic'],
     data() {
       return {
       }
@@ -36,7 +36,7 @@
 
   methods: {
     showEventDetail(event){
-      this.$showModal(EventDetail, { fullscreen: true, props: { event: event }});
+      this.$showModal(EventDetail, { fullscreen: true, props: { event: event, isPublic: this.isPublic }});
     },
   },
 }

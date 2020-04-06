@@ -10,8 +10,8 @@
           </FlexboxLayout>
           <Label horizontalAlignment="center" class="Label LabelDescription" v-model="$props.event.item.date"/>
           <Label horizontalAlignment="center" class="Label LabelDescription" v-model="$props.event.item.description"/>
-          <Button class="Btn" text="Rejoindre" @tap="joinPublicEvent"/>
-
+          <Button v-if="isPublic" class="Btn" text="Rejoindre" @tap="joinPublicEvent"/>
+          <Button v-if="!isPublic" class="Btn" text="Voir" @tap="seeEvent"/>
       </StackLayout>
   </Page>
 </template>
@@ -28,7 +28,7 @@
       userInteractionEnabled: false,
   };
   export default {
-      props: ['event'],
+      props: ['event', 'isPublic'],
     components: {
         BackArrow,
         BottomNav
@@ -51,6 +51,9 @@
                   loader.hide();
                   alert("Une erreur est survenue");
               })
+          },
+          seeEvent(){
+            //AJOUTER CODE PHOTO / MESSAGES DE L'EVENT ICI
           },
       },
     data() {

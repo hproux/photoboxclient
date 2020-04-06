@@ -6,7 +6,7 @@
       </TabViewItem>
       <TabViewItem title="Public">
         <Frame>
-        <EventsList :list="list"/>
+        <EventsList :list="list" isPublic="true"/>
         </Frame>
       </TabViewItem>
     </TabView>
