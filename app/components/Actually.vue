@@ -102,4 +102,8 @@
     font-size:12em;
 }
 
+    .liste{
+        //height:70%;
+    }
+
 </style>
