@@ -44,6 +44,8 @@
                   loader.hide();
                   console.log(response.data);
                   that.closeModal();
+                  that.$navigateTo(BottomNav);
+
               }).catch((err) => {
                   console.log(err.response.request._response);
                   loader.hide();
