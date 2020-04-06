@@ -1,17 +1,6 @@
 <template lang="html">
   <Page actionBarHidden="true">
     <StackLayout>
-    <!--<Label if="list" :text="list"/>
-
-      <ListView for="item in list">
-        <v-template>
-          <StackLayout>
-
-              <Label :text="item.name"/>
-            </StackLayout>
-        </v-template>
-      </ListView>-->
-     
       <ListView class="list" for="item in list">
         <v-template>
           <FlexboxLayout class="item" alignItems="center" alignContent="center" flexDirection="row">
@@ -35,43 +24,18 @@
       </StackLayout>
   </Page>
 </template>
-
 <script>
-
   export default {
     props: ['list'],
 
     data() {
       return {
-        items:[
-          {"nom" : "ParkWay Drive", "lieu": "Place Saint-Martion","date":"21-01-2019"},
-          {"nom": "ParkWay Drive", "lieu": "La Cale", "date": "21-01-2019"},
-          {"nom": "ParkWay Drive", "lieu": "Place Saint-Martion", "date": "21-01-2019"},
-          {"nom": "ParkWay Drive", "lieu": "La Cale", "date": "21-01-2019"},
-          {"nom": "ParkWay Drive", "lieu": "Place Saint-Martion", "date": "21-01-2019"},
-          {"nom": "ParkWay Drive", "lieu": "La Cale", "date": "21-01-2019"},
-          {"nom": "ParkWay Drive", "lieu": "Place Saint-Martion", "date": "21-01-2019"},
-          {"nom": "ParkWay Drive", "lieu": "La Cale", "date": "21-01-2019"},
-          {"nom": "ParkWay Drive", "lieu": "Place Saint-Martion", "date": "21-01-2019"},
-          {"nom": "ParkWay Drive", "lieu": "La Cale", "date": "21-01-2019"},
-          {"nom": "ParkWay Drive", "lieu": "Place Saint-Martion", "date": "21-01-2019"},
-          {"nom": "ParkWay Drive", "lieu": "La Cale", "date": "21-01-2019"},
-          {"nom": "ParkWay Drive", "lieu": "Place Saint-Martion", "date": "21-01-2019"},
-          {"nom": "ParkWay Drive", "lieu": "La Cale", "date": "21-01-2019"},
-          {"nom": "ParkWay Drive", "lieu": "Place Saint-Martion", "date": "21-01-2019"},
-          {"nom": "ParkWay Drive", "lieu": "La Cale", "date": "21-01-2019"},
-
-        ]
       }
     },
 
   methods: {
 
   },
-
-  mounted(){
-    //console.log("lsite : " + this.list);
-  }
 }
 </script>
 

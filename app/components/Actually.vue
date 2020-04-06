@@ -4,15 +4,21 @@
                  tabTextColor="#CCCCCC">
             <TabViewItem class="TabViewElems" title="Evénements organisés">
                 <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
-                        <Label class="LabelEvents" :text="LabelEvents"/>
+                        <Label class="LabelEvents" v-model="LabelMyEvents"/>
                     <Frame>
-                        <EventsList height="80%"/>
+                        <EventsList :list="myEventsList" height="80%"/>
                     </Frame>
                     <Button class="BtnCreate" text="+ Créer" @tap="createEvent"/>
                 </FlexboxLayout>
             </TabViewItem>
             <TabViewItem class="TabViewElems" title="Mes événements">
-                <Label text="Mes événements"/>
+                <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
+                <Label class="LabelEvents" v-model="LabelInvolvedEvents"/>
+                <Frame>
+                    <EventsList :list="involvedEventsList" height="80%"/>
+                </Frame>
+                </FlexboxLayout>
+
             </TabViewItem>
         </TabView>
     </Page>
@@ -41,9 +47,10 @@
     },
     data(){
         return {
-            LabelEvents:"Vous organisez n événements",
-            involvedEventsList:null,
-            myEventsList:null,
+            LabelInvolvedEvents:null,
+            LabelMyEvents:null,
+            involvedEventsList:[],
+            myEventsList:[],
         };
     },
      created(){
@@ -52,8 +59,10 @@
         //Involved events
          that.$axios.get("events/involved")
              .then((response) => {
-                 that.involvedEventsList = response.data;
-                 //console.log(that.involvedEventsList);
+                 Object.values(response.data).forEach((data)=>{
+                     that.involvedEventsList.push(data);
+                 });
+                 that.LabelInvolvedEvents = "Vous participez à "+that.involvedEventsList.length+" évènements";
              }).catch((err) => {
              console.log(err.response.request._response);
              alert("Une erreur est survenue");
@@ -62,11 +71,10 @@
          that.$axios.get("events/created")
              .then((response) => {
                  loader.hide();
-                 //console.log(response.data);
-                 that.myEventsList = response.data;
                  Object.values(response.data).forEach((data)=>{
-                    console.log(data.name);
+                     that.myEventsList.push(data);
                  });
+                 that.LabelMyEvents = "Vous organisez "+that.myEventsList.length+" évènements";
              }).catch((err) => {
              console.log(err.response.request._response);
              loader.hide();

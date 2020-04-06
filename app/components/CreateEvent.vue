@@ -49,7 +49,7 @@ methods: {
         description:that.description
       }).then((response) => {
         loader.hide();
-        console.log(response.data);
+        //console.log(response.data);
         that.$navigateTo(BottomNav);
       }).catch((err) => {
         console.log(err.response.request._response);

@@ -42,12 +42,12 @@ export default {
           Object.values(response.data).forEach((data)=>{
             this.list.push(data);
           });
-          console.log(this.list);
+          //console.log(this.list);
           loader.hide();
         }).catch((err) => {
           console.log(err.response.request._response);
           loader.hide();
-          alert("Une erreur est survenue");          
+          alert("Une erreur est survenue");
         });
        }
     },
@@ -59,6 +59,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
- 
+
 
 </style>

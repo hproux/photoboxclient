@@ -3,7 +3,6 @@ export default class formatDate {
     }
 
     static dateToYearMonthDay(date){
-
         return date.getFullYear()+"-"+(Number(date.getMonth())+1)+"-"+date.getDate();
     }
 
