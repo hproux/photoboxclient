@@ -10,7 +10,7 @@
           </FlexboxLayout>
           <Label horizontalAlignment="center" class="Label LabelDescription" v-model="$props.event.item.date"/>
           <Label horizontalAlignment="center" class="Label LabelDescription" v-model="$props.event.item.description"/>
-          <Button class="Btn" text="Rejoindre" @tap=""/>
+          <Button class="Btn" text="Rejoindre" @tap="joinPublicEvent"/>
 
       </StackLayout>
   </Page>
@@ -19,6 +19,14 @@
 <script>
   import BottomNav from "./BottomNav.vue";
   import BackArrow from "./BackArrow.vue";
+  const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
+  const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
+  const loader = new LoadingIndicator();
+  const options = {
+      message: "Ajout de l'évènement",
+      details: 'Veuillez patienter...',
+      userInteractionEnabled: false,
+  };
   export default {
       props: ['event'],
     components: {
@@ -29,14 +37,24 @@
           closeModal(){
               this.$modal.close();
           },
+          joinPublicEvent(){
+              let that = this;
+              loader.show(options);
+              that.$axios.post("event/join/"+this.event.item.token).then((response) => {
+                  loader.hide();
+                  console.log(response.data);
+                  that.closeModal();
+              }).catch((err) => {
+                  console.log(err.response.request._response);
+                  loader.hide();
+                  alert("Une erreur est survenue");
+              })
+          },
       },
     data() {
         return {
         };
     },
-      created(){
-          console.log(this.event);
-      },
 }
 </script>
 
