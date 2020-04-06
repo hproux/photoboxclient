@@ -15,7 +15,7 @@
                   <Image class="ImgPin" src="~/img/pin.png"/>
                   <Label class="LabelItem" :text="item.location"/>
                 </FlexboxLayout>
-                <Label class="LabelItem" :text="item.date"/>
+                <Label class="LabelItem" :text="transformDate(item.date)"/>
               </FlexboxLayout>
             </StackLayout>
     </FlexboxLayout>
@@ -26,7 +26,7 @@
 </template>
 <script>
   import EventDetail from "./EventDetail";
-
+  import formatDate from "../utils/formatDate";
   export default {
     props: ['list', 'isPublic'],
     data() {
@@ -38,6 +38,10 @@
     showEventDetail(event){
       this.$showModal(EventDetail, { fullscreen: true, props: { event: event, isPublic: this.isPublic }});
     },
+    transformDate(date){
+      let convertedDate = new Date(date)
+      return formatDate.dateToYearMonthDay(convertedDate);
+    }
   },
 }
 </script>
