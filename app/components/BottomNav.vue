@@ -1,6 +1,6 @@
 <template lang="html">
   <Page>
-    <BottomNavigation>
+    <BottomNavigation selectedIndex="2">
         <TabStrip>
           <TabStripItem class="navigation__item">
               <Label text="Historique"></Label>

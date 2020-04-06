@@ -52,9 +52,8 @@
         //Involved events
          that.$axios.get("events/involved")
              .then((response) => {
-                 console.log(response.data);
                  that.involvedEventsList = response.data;
-
+                 //console.log(that.involvedEventsList);
              }).catch((err) => {
              console.log(err.response.request._response);
              alert("Une erreur est survenue");
@@ -63,9 +62,11 @@
          that.$axios.get("events/created")
              .then((response) => {
                  loader.hide();
-                 console.log(response.data);
-                 that.involvedEventsList = response.data;
-
+                 //console.log(response.data);
+                 that.myEventsList = response.data;
+                 Object.values(response.data).forEach((data)=>{
+                    console.log(data.name);
+                 });
              }).catch((err) => {
              console.log(err.response.request._response);
              loader.hide();

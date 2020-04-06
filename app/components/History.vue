@@ -1,7 +1,7 @@
 <template lang="html">
   <Page actionBarHidden="true">
       <Frame>
-      <EventsList/>
+        <EventsList/>
       </Frame>
   </Page>
 </template>

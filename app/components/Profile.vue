@@ -11,8 +11,6 @@
        </StackLayout>
         <StackLayout v-else>
             <Image class="ImgUserEdit" horizontalAlignment="center" src="~/img/user.png"/>
-            <TextField horizontalAlignment="center" hint="Nom Prenom..." class="LabelItem" v-model="LabelNom"/>
-            <TextField horizontalAlignment="center" hint="Pseudo..." class="LabelItem" v-model="pseudo"/>
             <TextField horizontalAlignment="center" hint="Telephone..." class="LabelItem" v-model="tel"/>
             <TextField horizontalAlignment="center" hint="Mail..." class="LabelItem" v-model="mail"/>
             <Button class="BtnSave" text="Sauvegarder" @tap="save"/>
@@ -23,13 +21,35 @@
 </template>
 
 <script>
+import Login from "./Login";
+const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
+const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
+const loader = new LoadingIndicator();
+const options = {
+    message: "Mise à jour du profile",
+    details: 'Veuillez patienter...',
+    userInteractionEnabled: false,
+};
 export default {
     methods:{
       edit(){
           this.isEdit = false;
       },
       save(){
-          if(this.LabelNom && this.tel && this.pseudo && this.mail){
+          let that = this;
+          if(that.tel && that.mail){
+              loader.show(options);
+              that.$axios.put("user", {
+                  tel: that.tel,
+                  mail: that.mail,
+              }).then((response) => {
+                  loader.hide();
+                  console.log(response.data);
+                  that.$axios.defaults.headers.Authorization = 'Bearer ' + response.data.token;
+              }).catch((err) => {
+                  console.log(err);
+                  loader.hide();
+              });
               this.isEdit = true;
           }else{
               alert("Tous les champs ne sont pas correctement remplis.")

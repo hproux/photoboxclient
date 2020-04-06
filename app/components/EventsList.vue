@@ -1,7 +1,7 @@
 <template lang="html">
   <Page actionBarHidden="true">
     <StackLayout>
-      <ListView for="item in items">
+      <ListView height="100%" for="item in items">
         <v-template>
           <FlexboxLayout class="item" alignItems="center" alignContent="center" flexDirection="row">
             <Image class="ImgEvent" src="~/img/user.png"/>
