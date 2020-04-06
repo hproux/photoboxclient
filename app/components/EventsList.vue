@@ -1,7 +1,7 @@
 <template lang="html">
   <Page actionBarHidden="true">
     <StackLayout>
-      <ListView class="list" for="item in list">
+      <ListView class="list" for="item in list" @itemTap="showEventDetail">
         <v-template>
           <FlexboxLayout class="item" alignItems="center" alignContent="center" flexDirection="row">
             <Image class="ImgEvent" src="~/img/user.png"/>
@@ -25,16 +25,19 @@
   </Page>
 </template>
 <script>
+  import EventDetail from "./EventDetail";
+
   export default {
     props: ['list'],
-
     data() {
       return {
       }
     },
 
   methods: {
-
+    showEventDetail(event){
+      this.$showModal(EventDetail, { fullscreen: true, props: { event: event }});
+    },
   },
 }
 </script>
@@ -57,6 +60,7 @@
   color:white;
   font-size:17em;
 }
+
   .item{
     background-color: transparent;
     padding-top: -80px;

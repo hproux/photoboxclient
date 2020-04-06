@@ -42,7 +42,7 @@
     },
     methods:{
         createEvent(){
-            this.$navigateTo(CreateEvent);
+            this.$showModal(CreateEvent, { fullscreen: true});
         }
     },
     data(){
@@ -59,7 +59,7 @@
         //Involved events
          that.$axios.get("events/involved")
              .then((response) => {
-                 Object.values(response.data).forEach((data)=>{
+                 Object.values(response.data).forEach((data,index)=>{
                      that.involvedEventsList.push(data);
                  });
                  that.LabelInvolvedEvents = "Vous participez à "+that.involvedEventsList.length+" évènements";
@@ -71,8 +71,9 @@
          that.$axios.get("events/created")
              .then((response) => {
                  loader.hide();
-                 Object.values(response.data).forEach((data)=>{
+                 Object.values(response.data).forEach((data,index)=>{
                      that.myEventsList.push(data);
+
                  });
                  that.LabelMyEvents = "Vous organisez "+that.myEventsList.length+" évènements";
              }).catch((err) => {

@@ -2,7 +2,7 @@
   <Page>
         <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
           <FlexboxLayout class="fullWidth" flexDirection="row">
-            <BackArrow/>
+            <Image class="backArrow" @tap="closeModal" src="~/img/left-arrow.png" stretch="none"/>
             <Label class="LabelMain" text="Créer un événement"/>
           </FlexboxLayout>
           <TextField class="TextField TextFieldName" v-model="nom" hint="Nom"/>
@@ -37,6 +37,9 @@
       BackArrow
     },
 methods: {
+  closeModal(){
+    this.$modal.close();
+  },
   create(){
     let that = this;
     if(that.nom && that.adresse && that.description){
@@ -86,6 +89,10 @@ methods: {
     font-size: 17em;
     margin-top:2%;
     color : white;
+  }
+
+  .backArrow{
+      margin-top:3%;
   }
 
 .TextViewDescription{

@@ -49,7 +49,7 @@ export default {
           loader.hide();
           alert("Une erreur est survenue");
         });
-       }
+       },
     },
 
     mounted(){
