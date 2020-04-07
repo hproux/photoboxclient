@@ -117,12 +117,11 @@ export default {
     }
 
     .LabelItem {
-        placeholder-color:white;
         color: white;
         font-size: 17em;
         margin-bottom : 1%;
         border-bottom-color: white;
-        border-bottom-width: 3px;
+        border-bottom-width: 2px;
         width : 70%;
         text-align: center;
         padding-bottom: 15em;
