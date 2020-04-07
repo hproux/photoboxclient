@@ -19,7 +19,7 @@ const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').Load
 const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
 const loader = new LoadingIndicator();
 const options = {
-  message: "Récupération des données",
+  message: "Récupération des évènements",
   details: 'Veuillez patienter...',
   userInteractionEnabled: false,
 };
