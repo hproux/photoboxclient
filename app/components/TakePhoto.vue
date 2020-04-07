@@ -3,32 +3,17 @@
     <ActionBar class="action-bar">
       <Label class="action-bar-title" text=""></Label>
     </ActionBar>
+    <StackLayout>
+      <FlexboxLayout class="upBar" flexDirection="row">
+        <Image v-if="lastImg" class="backArrow" @tap="closeModal" src="~/img/left-arrow.png" stretch="none"/>
+        <Label class="Label LabelNom" v-model="$props.event.item.name"/>
+      </FlexboxLayout>
+      <Image class="Img" :src="lastImg"/>
+      <TextView class="TextViewComment" hint="Votre commentaire..." v-model="comment"/>
+      <Button text="Ajouter commentaire" class="BtnAddComment" @tap="addComment"  padding="10"/>
 
-    <GridLayout rows="auto, *, auto, auto">
-      <StackLayout row="0" orientation="vertical" padding="5">
-        <StackLayout orientation="horizontal" row="0" padding="5">
-          <Label text="saveToGallery" />
-          <Switch v-model="saveToGallery"/>
-        </StackLayout>
-        <StackLayout android:visibility="collapsed" orientation="horizontal" row="0" padding="5">
-          <Label text="allowsEditing" />
-          <Switch v-model="allowsEditing"/>
-        </StackLayout>
-        <StackLayout orientation="horizontal" row="0" padding="5">
-          <Label text="keepAspectRatio" />
-          <Switch v-model="keepAspectRatio"/>
-        </StackLayout>
-        <StackLayout orientation="horizontal" padding="5">
-          <Label text="width"></Label>
-          <TextField hint="Enter width" keyboardType="number" v-model="width" class="input"></TextField>
-          <Label text="height"></Label>
-          <TextField hint="Enter height" keyboardType="number" v-model="height" class="input"></TextField>
-        </StackLayout>
-      </StackLayout>
-      <Image row="1" :src="cameraImage" id="image" stretch="aspectFit" margin="10"/>
-      <Button row="2"  :isEnabled="isThereImg" text="Envoi API" @tap="ApiSend"  padding="10"/>
-      <Button row="3"  text="Take Picture" @tap="onTakePictureTap"  padding="10"/>
-    </GridLayout>
+      <Button text="Prendre une photo" class="Btn" @tap="onTakePictureTap"  padding="10"/>
+    </StackLayout>
   </Page>
 </template>
 
@@ -45,64 +30,148 @@ const options = {
   userInteractionEnabled: false,
 };
 
+const options2 = {
+  message: "Chargement de l'image",
+  details: 'Veuillez patienter...',
+  userInteractionEnabled: false,
+};
 export default {
+  props: ['event'],
   data() {
     return {
-      saveToGallery: false,
-      allowsEditing: true,
-      keepAspectRatio: true,
-      width: 320,
-      height: 240,
       cameraImage: null,
-      isThereImg:false,
+      comment:null,
       base64 : null,
+      lastImg:null,
     }
   },
+  created(){
+    loader.show(options2);
+    this.getLastEventImage();
+    loader.hide();
+  },
   methods: {
-    onTakePictureTap: function(args) {
-      let page = (args.object).page;
-      requestPermissions().then(
-      () => {
-        takePicture({ width: this.width, height: this.height, keepAspectRatio: this.keepAspectRatio, saveToGallery: this.saveToGallery, allowsEditing: this.allowsEditing }).
+    closeModal(){
+      this.$modal.close();
+    },
+    onTakePictureTap:function(args){
+      let that = this;
+      requestPermissions().then(() => {
+        takePicture({ width: 320, height: 240, keepAspectRatio: true, saveToGallery: false, allowsEditing: false }).
         then((imageAsset) => {
-          this.cameraImage = imageAsset;
+          that.cameraImage = imageAsset;
           let source = new ImageSource();
-             source.fromAsset(imageAsset).then((src) => {
-            this.base64 = src.toBase64String("jpg",100);
-            this.base64 = "data:image/jpeg;base64,"+this.base64;
+          source.fromAsset(imageAsset).then((src) => {
+             that.base64 = src.toBase64String("jpg",100);
+             that.base64 = "data:image/jpeg;base64,"+that.base64;
+           that.sendImg();
           },
           (err) => {
             console.log("Error -> " + err.message);
+            loader.hide();
           });
-      },
+                },
       (err) => {
         console.log("Error -> " + err.message);
       });
     },
-    () => alert('permissions rejected')
-    );
-    if(this.cameraImage!==""){
-      this.isThereImg = true;
+    () => {
+      alert('permissions rejected');
     }
+    );
   },
-  ApiSend(){
-    loader.show(options);
-    let that = this;
-    that.$axios.post("picture", {
-      picture: this.base64,
-    }).then((response) => {
-      console.log(response.data);
-      loader.hide();
-    }).catch((err) => {
-      console.log(err.response.request._response);
-      loader.hide();
-      alert("Une erreur est survenue");
-    })
-  }
+    sendImg(){
+      console.log("test");
+      let that = this;
+      that.$axios.post("picture/event/"+that.event.item.token, {
+        picture: that.base64,
+      }).then((response) => {
+        console.log(response.data);
+        loader.hide();
+      }).catch((err) => {
+        console.log(err.response.request._response);
+        loader.hide();
+        alert("Une erreur est survenue");
+      })
+    },
+    getLastEventImage(){
+      let that = this;
+      that.$axios.get("event/picture/last/"+that.event.item.token
+      ).then((response) => {
+        that.lastImg = this.$axios.defaults.baseURL + response.data.picture.URI;
+        loader.hide();
+      }).catch((err) => {
+        console.log(err.response.request._response);
+        loader.hide();
+        alert("Une erreur est survenue");
+      })
+    },
+    addComment(){
+      if(this.comment!=null || this.comment!=""){
+        //Ajouter traitement API
+        this.comment = "";
+      }else{
+        alert("Veuillez écrire un commentaire!");
+      }
+    }
 }
 };
 </script>
 
 <style scoped lang="scss">
+  .upBar{
+    margin-top:4%;
+    margin-bottom: 5%;
+  }
 
+  .Label{
+    color:white;
+    font-size:17em;
+    overflow: auto;
+    text-overflow: ellipsis;
+  }
+
+  .LabelNom{
+    font-size: 25px;
+      margin-left:16%;
+  }
+
+  .Btn{
+    width : 90%;
+    border-radius: 100%;
+    font-size: 20em;
+    margin-top: 1%;
+    color : white;
+    background-color: #604591;
+  }
+
+  .BtnAddComment{
+    color: #604591;
+    background-color: white ;
+    width : 90%;
+    border-radius: 100%;
+    font-size: 20em;
+    margin-top: 2%;
+  }
+
+  .Img{
+    /*width:95%;*/
+    height:50%;
+  }
+
+  .TextViewComment{
+    margin-top:2%;
+    color:white;
+    font-size:17em;
+    border-color: white;
+    border-radius: 20px;
+    border-width:2px;
+    padding:10%;
+    width:95%;
+    placeholder-color:white;
+  }
+
+  .TextViewComment::placeholder{
+    color:white;
+  }
 </style>
