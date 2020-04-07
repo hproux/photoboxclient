@@ -24,6 +24,8 @@ import {ImageSource} from "@nativescript/core";
 const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
 const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
 const loader = new LoadingIndicator();
+const timerModule = require("tns-core-modules/timer");
+
 const options = {
   message: "Envoi de la photo",
   details: 'Veuillez patienter...',
@@ -43,15 +45,21 @@ export default {
       comment:null,
       base64 : null,
       lastImg:null,
+      loaderImg : null,
     }
   },
   created(){
     loader.show(options2);
     this.getLastEventImage();
     loader.hide();
+    this.loaderImg = timerModule.setInterval(() => {
+      console.log("Chargement de la derniere image");
+      this.getLastEventImage();
+    }, 5000)
   },
   methods: {
     closeModal(){
+      timerModule.clearInterval(this.loaderImg);
       this.$modal.close();
     },
     onTakePictureTap:function(args){
@@ -87,7 +95,7 @@ export default {
         picture: that.base64,
       }).then((response) => {
         console.log(response.data);
-        loader.hide();
+        that.getLastEventImage();
       }).catch((err) => {
         console.log(err.response.request._response);
         loader.hide();
@@ -99,10 +107,8 @@ export default {
       that.$axios.get("event/picture/last/"+that.event.item.token
       ).then((response) => {
         that.lastImg = this.$axios.defaults.baseURL + response.data.picture.URI;
-        loader.hide();
       }).catch((err) => {
         console.log(err.response.request._response);
-        loader.hide();
         alert("Une erreur est survenue");
       })
     },
