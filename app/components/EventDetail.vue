@@ -7,21 +7,24 @@
             </StackLayout>
 
             <Label horizontalAlignment="center" class="Label LabelNom" v-model="$props.event.item.name"/>
-
-            <FlexboxLayout class="infos" flexDirection="row" justifyContent="space-between">
-                <FlexboxLayout flexDirection="row">
-                    <Image class="ImgPin" src="~/img/pin.png"/>
-                    <Label horizontalAlignment="center" class="Label" v-model="$props.event.item.location"/>
+            
+            <StackLayout class="main">
+                <FlexboxLayout class="infos" flexDirection="row" justifyContent="space-between">
+                    <FlexboxLayout flexDirection="row">
+                        <Image class="ImgPin" src="~/img/pin.png"/>
+                        <Label horizontalAlignment="center" class="Label" color="#DDD" v-model="$props.event.item.location"/>
+                    </FlexboxLayout>
+                    <Label horizontalAlignment="center" class="Label" color="#DDD" :text="transformDate(event.item.date)"/>
                 </FlexboxLayout>
-                <Label horizontalAlignment="center" class="Label" :text="transformDate(event.item.date)"/>
-            </FlexboxLayout>
 
-            <StackLayout>
-                <TextView class="TextView" editable="false" v-model="$props.event.item.description"/>
-            </StackLayout>
+                <StackLayout>
+                    <TextView class="TextView" editable="false" v-model="$props.event.item.description"/>
+                </StackLayout>
+            
 
             <Button v-if="isPublic" class="Btn" text="Rejoindre" @tap="joinPublicEvent"/>
             <Button v-if="!isPublic" class="Btn" text="Voir" @tap="seeEvent"/>
+            </StackLayout>
         </StackLayout>
     </Page>
 </template>
@@ -84,13 +87,11 @@ import formatDate from "../utils/formatDate";
 
 <style lang="scss" scoped>
     .Btn{
-        width : 90%;
         border-radius: 100%;
         font-size: 20em;
-        margin-top: 25%;
-        margin-bottom: 2%;
         color : white;
         background-color: #604591;
+        margin-top: 150px;
     }
 
     .ImgPin{
@@ -108,6 +109,11 @@ import formatDate from "../utils/formatDate";
         border-radius: 100%;
         width: 400px;
 
+    }
+
+    .main{
+        margin: auto;
+        width: 90%;
     }
     .Label{
         color:white;
@@ -127,8 +133,7 @@ import formatDate from "../utils/formatDate";
     .TextView{
         border-width: 0;
         color: white;
-        font-size:18em;
-
+        font-size:20em;
     }
 
 </style>
