@@ -29,8 +29,8 @@
 <script>
   import BottomNav from "./BottomNav.vue";
   import BackArrow from "./BackArrow.vue";
+  import TakePhoto from "./TakePhoto";
 import formatDate from "../utils/formatDate";
-
   const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
   const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
   const loader = new LoadingIndicator();
@@ -43,7 +43,8 @@ import formatDate from "../utils/formatDate";
     props: ['event', 'isPublic'],
     components: {
         BackArrow,
-        BottomNav
+        BottomNav,
+        TakePhoto
     },
       methods:{
           closeModal(){
@@ -70,7 +71,8 @@ import formatDate from "../utils/formatDate";
             return formatDate.dateToYearMonthDay(convertedDate);
         },
           seeEvent(){
-            //AJOUTER CODE PHOTO / MESSAGES DE L'EVENT ICI
+              this.closeModal();
+              this.$showModal(TakePhoto, { fullscreen: true, props: { event: this.event }});
           },
       },
     data() {
