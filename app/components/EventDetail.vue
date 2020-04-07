@@ -1,25 +1,36 @@
 <template lang="html">
-  <Page actionBarHidden="true">
-      <StackLayout>
-          <Image class="backArrow" @tap="closeModal" src="~/img/left-arrow.png" stretch="none"/>
-          <Image class="ImgEvent" src="~/img/user.png"/>
-          <Label horizontalAlignment="center" class="Label LabelNom" v-model="$props.event.item.name"/>
-          <FlexboxLayout flexDirection="row">
-              <Image class="ImgPin" src="~/img/pin.png"/>
-              <Label horizontalAlignment="center" class="Label LabelDescription" v-model="$props.event.item.location"/>
-          </FlexboxLayout>
-          <Label horizontalAlignment="center" class="Label LabelDescription" v-model="$props.event.item.date"/>
-          <Label horizontalAlignment="center" class="Label LabelDescription" v-model="$props.event.item.description"/>
-          <Button v-if="isPublic" class="Btn" text="Rejoindre" @tap="joinPublicEvent"/>
-          <Button v-if="!isPublic" class="Btn" text="Voir" @tap="seeEvent"/>
-      </StackLayout>
-  </Page>
+    <Page actionBarHidden="true">
+        <StackLayout>
+            <Image class="backArrow" @tap="closeModal" src="~/img/left-arrow.png" stretch="none"/>
+            <StackLayout class="bordered">
+                <Image class="ImgEvent" src="~/img/user.png"/>
+            </StackLayout>
+
+            <Label horizontalAlignment="center" class="Label LabelNom" v-model="$props.event.item.name"/>
+
+            <FlexboxLayout class="infos" flexDirection="row" justifyContent="space-between">
+                <FlexboxLayout flexDirection="row">
+                    <Image class="ImgPin" src="~/img/pin.png"/>
+                    <Label horizontalAlignment="center" class="Label" v-model="$props.event.item.location"/>
+                </FlexboxLayout>
+                <Label horizontalAlignment="center" class="Label" :text="transformDate(event.item.date)"/>
+            </FlexboxLayout>
+
+            <StackLayout>
+                <TextView class="TextView" editable="false" v-model="$props.event.item.description"/>
+            </StackLayout>
+
+            <Button v-if="isPublic" class="Btn" text="Rejoindre" @tap="joinPublicEvent"/>
+            <Button v-if="!isPublic" class="Btn" text="Voir" @tap="seeEvent"/>
+        </StackLayout>
+    </Page>
 </template>
 
 <script>
   import BottomNav from "./BottomNav.vue";
   import BackArrow from "./BackArrow.vue";
   import TakePhoto from "./TakePhoto";
+import formatDate from "../utils/formatDate";
   const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
   const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
   const loader = new LoadingIndicator();
@@ -29,7 +40,7 @@
       userInteractionEnabled: false,
   };
   export default {
-      props: ['event', 'isPublic'],
+    props: ['event', 'isPublic'],
     components: {
         BackArrow,
         BottomNav,
@@ -54,6 +65,11 @@
                   alert("Une erreur est survenue");
               })
           },
+
+        transformDate(date){
+            let convertedDate = new Date(date)
+            return formatDate.dateToYearMonthDay(convertedDate);
+        },
           seeEvent(){
               this.closeModal();
               this.$showModal(TakePhoto, { fullscreen: true, props: { event: this.event }});
@@ -83,11 +99,19 @@
     .ImgEvent{
         border-radius: 100%;
         width: 400px;
-        margin-bottom: 2%;
+    }
+
+    .bordered{
+        border-color: white;
+        border-width: 10px;
+        border-style: solid;
+        border-radius: 100%;
+        width: 400px;
+
     }
     .Label{
         color:white;
-        font-size:17em;
+        font-size:16em;
         overflow: auto;
         text-overflow: ellipsis;
     }
@@ -98,6 +122,13 @@
     }
     .backArrow{
         margin-top: 3%;
+    }
+
+    .TextView{
+        border-width: 0;
+        color: white;
+        font-size:18em;
+
     }
 
 </style>

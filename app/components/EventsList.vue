@@ -69,6 +69,9 @@
     background-color: transparent;
     padding-top: -80px;
     padding-bottom: -50px;
+    border-color: white;
+    border-style: solid;
+    border-width: 1px;
   }
 
    .list{
