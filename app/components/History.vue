@@ -12,7 +12,7 @@
   const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
   const loader = new LoadingIndicator();
   const options = {
-      message: "Récupération des évènements",
+      message: "Récupération de l'historique",
       details: 'Veuillez patienter...',
       userInteractionEnabled: false,
   };
@@ -23,11 +23,9 @@
       methods:{
           getList(){
               loader.show(options);
-              this.$axios.get("history").then(response => {
-                  Object.values(response.data).forEach((data)=>{
-                      this.list.push(data);
-                  });
-                  //console.log(this.list);
+              this.$axios.get("events/history").then(response => {
+                  this.list = Object.values(response.data);
+                  console.log(this.list);
                   loader.hide();
               }).catch((err) => {
                   console.log(err.response.request._response);
