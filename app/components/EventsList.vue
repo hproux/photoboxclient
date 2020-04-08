@@ -8,7 +8,7 @@
             <StackLayout>
                 <FlexboxLayout justifyContent="space-between" flexDirection="row">
                   <Label class="LabelItem" :text="item.name"/>
-                  <Label class="LabelItem LabelEtat" text="inscrit"/>
+                  <Label class="LabelItem LabelEtat" :text="item.status"/>
                 </FlexboxLayout>
               <FlexboxLayout class="fullWidth" justifyContent="space-between" flexDirection="row">
                 <FlexboxLayout flexDirection="row">

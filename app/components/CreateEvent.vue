@@ -7,9 +7,11 @@
           </FlexboxLayout>
           <TextField class="TextField TextFieldName" v-model="nom" hint="Nom"/>
           <TextField class="TextField" v-model="adresse" hint="Adresse"/>
-          <Label class="TextField TextFieldDate" text="Date de l'événement"/>
-          <DatePicker class="datePicker" :minDate="dateToday" v-model="date"/>
-            <TextView class="TextViewDescription" v-model="description" hint="Description"/>
+          <Label class="TextField TextFieldDate" :text="dateTime"/>
+          <Button class="BtnPicker" text="Choisir une date" @tap="selectDate"/>
+          <Button class="BtnPicker" text="Choisir une heure" @tap="selectTime"/>
+
+          <TextView class="TextViewDescription" v-model="description" hint="Description"/>
           <FlexboxLayout flexDirection="row">
             <Label class="LabelPublic" text="Public"/>
             <Switch offBackgroundColor="#614fa5" color="white" class="switch" v-model="public"/>
@@ -22,9 +24,11 @@
 <script>
   import BottomNav from "./BottomNav.vue";
   import BackArrow from "./BackArrow.vue";
-  import formatDate from "../utils/formatDate";
   const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
   const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
+  const MDTPicker = require("nativescript-modal-datetimepicker").ModalDatetimepicker;
+  const mDtpicker = new MDTPicker();
+
   const loader = new LoadingIndicator();
   const options = {
     message: "Création de l'évènement",
@@ -40,40 +44,74 @@ methods: {
   closeModal(){
     this.$modal.close();
   },
+  selectDate() {
+    mDtpicker.pickDate({
+      title: "Choisir la date de l'évènement",
+      minDate: new Date(),
+    }).then((result) => {
+        this.date = result.day + "/" + result.month + "/" + result.year;
+      this.dateTime = "Date de l'évènement: " + this.date+ " "+this.time;
+
+      console.log("Date is: " + result.day + "-" + result.month + "-" + result.year);
+      })
+      .catch((error) => {
+        console.log("Error: " + error);
+      });
+  },
+  selectTime() {
+    mDtpicker.pickTime({
+      is24HourView: true,
+      title: "Choisir l'heure de début",
+    }).then((result) => {
+        this.time = result.hour + ":" + result.minute;
+        this.dateTime = "Date de l'évènement: " + this.date + " "+this.time;
+        console.log("Time is: " + result.hour + ":" + result.minute);
+      })
+      .catch((error) => {
+        console.log("Error: " + error);
+      });
+  },
   create(){
     let that = this;
-    if(that.nom && that.adresse && that.description){
-      loader.show(options);
-      that.$axios.post("event", {
-        name : that.nom,
-        date :formatDate.dateToYearMonthDayHourMinutes(that.date),
-        location :that.adresse,
-        public : that.public,
-        description:that.description
-      }).then((response) => {
-        loader.hide();
-        //console.log(response.data);
-        that.$navigateTo(BottomNav);
-      }).catch((err) => {
-        console.log(err.response.request._response);
-        loader.hide();
-        alert("Une erreur est survenue");
-      })
+    if(that.nom && that.adresse && that.description) {
+      if(that.time && that.date){
+        loader.show(options);
+        that.$axios.post("event", {
+          name: that.nom,
+          date: that.date + " " + that.time,
+          location: that.adresse,
+          public: that.public,
+          description: that.description
+        }).then((response) => {
+          loader.hide();
+          //console.log(response.data);
+          that.closeModal();
+        }).catch((err) => {
+          console.log(err.response.request._response);
+          loader.hide();
+          alert("Une erreur est survenue");
+        })
+    }else{
+        alert("La date est l'heure n'ont pas étés définis");
+      }
     }else{
       alert("Champs non remplis !");
     }
   },
 },
     created(){
+      this.dateTime = "Date de l'évènement";
       this.date = new Date();
     },
   data() {
     return {
       nom: null,
       adresse: null,
+      dateTime : null,
       public : true,
-      date: null,
+      date: "",
       description : null,
+      time : "",
       dateToday: Date(),
     }
   }
@@ -82,9 +120,6 @@ methods: {
 
 <style lang="scss" scoped>
 
-  .datePicker {
-    height: 25%;
-  }
   .LabelPublic{
     font-size: 17em;
     margin-top:2%;
@@ -108,12 +143,21 @@ methods: {
 }
 
   .BtnCreate {
+       width: 80%;
+       border-radius: 100%;
+       color : white;
+       background-color: #614fa5 ;
+       font-size: 20em;
+       margin-top: 5%;
+     }
+
+  .BtnPicker {
     width: 80%;
     border-radius: 100%;
-    color : white;
-    background-color: #614fa5 ;
+    color : #614fa5;
+    background-color: white;
     font-size: 20em;
-    margin-top: 5%;
+    margin-top: 1%;
   }
 
   .TextFieldName{

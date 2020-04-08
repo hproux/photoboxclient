@@ -18,6 +18,8 @@
     "base-64": "^0.1.0",
     "nativescript-camera": "^4.5.0",
     "nativescript-gradient": "^2.0.1",
+    "nativescript-material-datetimepicker": "^1.0.9",
+    "nativescript-modal-datetimepicker": "^1.2.2",
     "nativescript-vue": "~2.4.0",
     "nativescript-vuex-persistent": "^1.2.0",
     "tns-core-modules": "^6.4.0",
