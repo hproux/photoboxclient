@@ -53,7 +53,7 @@ import formatDate from "../utils/formatDate";
           joinPublicEvent(){
               let that = this;
               loader.show(options);
-              that.$axios.post("event/join/"+this.event.item.token).then((response) => {
+              that.$axios.post("event/join/public"+this.event.item.token).then((response) => {
                   loader.hide();
                   console.log(response.data);
                   that.closeModal();
