@@ -29,7 +29,6 @@
   const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
   const MDTPicker = require("nativescript-modal-datetimepicker").ModalDatetimepicker;
   const mDtpicker = new MDTPicker();
-
   const loader = new LoadingIndicator();
   const options = {
     message: "Création de l'évènement",
@@ -42,6 +41,7 @@
       BackArrow
     },
 methods: {
+
   closeModal(){
     this.$modal.close();
   },
