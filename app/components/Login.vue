@@ -40,8 +40,8 @@
     },
   data() {
     return {
-      id : null,
-      password : null,
+      id : "hugo.proux@live.fr",
+      password : "azerty",
     }
   },
   methods: {

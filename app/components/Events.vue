@@ -26,7 +26,11 @@ export default {
   components: {
       EventsList
     },
+methods:{
+  joinPrivateEvent(){
 
+  },
+},
   data() {
     return {
       list: [],
