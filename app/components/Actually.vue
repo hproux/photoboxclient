@@ -6,7 +6,7 @@
                 <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
                         <Label class="LabelEvents" v-model="LabelMyEvents"/>
                     <Frame>
-                        <EventsList v-if="this.$store.state.reloadActually" :list="myEventsList" height="80%"/>
+                        <EventsList v-if="this.$store.state.myEvents" :list="this.$store.state.myEvents" height="80%"/>
                     </Frame>
                     <Button class="BtnCreate" text="+ Créer" @tap="createEvent"/>
                 </FlexboxLayout>
@@ -15,7 +15,7 @@
                 <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
                 <Label class="LabelEvents" v-model="LabelInvolvedEvents"/>
                 <Frame>
-                    <EventsList v-if="this.$store.state.reloadActually" :list="involvedEventsList" height="80%"/>
+                    <EventsList v-if="this.$store.state.involvedEvents" :list="this.$store.state.involvedEvents" height="80%"/>
                 </Frame>
                 </FlexboxLayout>
 
@@ -27,6 +27,10 @@
 <script>
     import CreateEvent from "./CreateEvent.vue";
     import EventsList from "./EventsList.vue";
+    const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
+    const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
+    const loader = new LoadingIndicator();
+
     export default {
     components: {
         CreateEvent,
@@ -41,20 +45,37 @@
         return {
             LabelInvolvedEvents:null,
             LabelMyEvents:null,
-            involvedEventsList:[],
-            myEventsList:[],
         };
     },
      created(){
-        this.$store.commit("loadInvolvedEvents", this.$axios);
-         this.involvedEventsList = this.$store.state.involvedEvents;
-         this.LabelInvolvedEvents = "Vous participez à "+this.involvedEventsList.length+" évènements";
+         let options = {
+             message: "Chargement des évènements",
+             details: 'Veuillez patienter...',
+             userInteractionEnabled: false,
+         };
+         //Involved events
+         loader.show(options);
+         this.$axios.get("events/involved")
+             .then((response) => {
+                 this.$store.state.involvedEvents = Object.values(response.data);
+                 this.LabelInvolvedEvents = "Vous participez à "+this.involvedEventsList.length+" évènements";
 
-         //My Events
-         this.$store.commit("loadMyEvents", this.$axios);
-         this.myEventsList = this.$store.state.myEvents;
-         this.LabelMyEvents = "Vous organisez "+this.myEventsList.length+" évènements";
+             }).catch((err) => {
+             console.log(err.response.request._response);
+             alert("Une erreur est survenue");
+         })
 
+         //created events
+         this.$axios.get("events/created")
+             .then((response) => {
+                 loader.hide();
+                 this.$store.state.myEvents = Object.values(response.data);
+                 this.LabelMyEvents = "Vous organisez "+this.myEventsList.length+" évènements";
+             }).catch((err) => {
+             console.log(err.response.request._response);
+             loader.hide();
+             alert("Une erreur est survenue");
+         })
       },
  }
 </script>
