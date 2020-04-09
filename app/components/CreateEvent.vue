@@ -24,6 +24,7 @@
 <script>
   import BottomNav from "./BottomNav.vue";
   import BackArrow from "./BackArrow.vue";
+  import formatDate from "../utils/formatDate";
   const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
   const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
   const MDTPicker = require("nativescript-modal-datetimepicker").ModalDatetimepicker;
@@ -49,10 +50,8 @@ methods: {
       title: "Choisir la date de l'évènement",
       minDate: new Date(),
     }).then((result) => {
-        this.date = result.day + "/" + result.month + "/" + result.year;
+        this.date = formatDate.datePickerToDate(result);
       this.dateTime = "Date de l'évènement: " + this.date+ " "+this.time;
-
-      console.log("Date is: " + result.day + "-" + result.month + "-" + result.year);
       })
       .catch((error) => {
         console.log("Error: " + error);
@@ -63,9 +62,8 @@ methods: {
       is24HourView: true,
       title: "Choisir l'heure de début",
     }).then((result) => {
-        this.time = result.hour + ":" + result.minute;
+        this.time = formatDate.timePickerToDate(result);
         this.dateTime = "Date de l'évènement: " + this.date + " "+this.time;
-        console.log("Time is: " + result.hour + ":" + result.minute);
       })
       .catch((error) => {
         console.log("Error: " + error);
@@ -77,6 +75,10 @@ methods: {
     if(that.nom && that.adresse && that.description) {
       if(that.adresse.length<5){
         alert('L\'adresse doit contenir au moins 5 caractères');
+        return;
+      }
+      if(that.description.length<5){
+        alert('La description doit contenir au moins 5 caractères');
         return;
       }
       if(that.time && that.date){
