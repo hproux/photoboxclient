@@ -59,6 +59,7 @@
       BackArrow,
       Login,
     },
+
     methods: {
       onButtonTap() {
         console.log("Button was pressed");

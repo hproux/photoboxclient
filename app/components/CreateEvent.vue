@@ -107,18 +107,16 @@
       this.dateTime = "Date de l'évènement";
       this.date = new Date();
     },
-    data() {
-      return {
+  data() {
+    return {
+      nom: null,
+      adresse: null,
+      dateTime : null,
+      public : true,
+      date: "",
+      description : null,
+      time : "",
         isBusy: false,
-        nom: null,
-        adresse: null,
-        dateTime: null,
-        public: true,
-        date: "",
-        description: null,
-        time: "",
-        dateToday: Date(),
-      }
     }
   }
 </script>
