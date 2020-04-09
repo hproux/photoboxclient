@@ -22,6 +22,10 @@
                     </FlexboxLayout>
                     <Label horizontalAlignment="center" class="Label" color="#DDD" :text="transformDate(event.item.date)"/>
                 </FlexboxLayout>
+
+                <StackLayout>
+                    <TextView class="TextView" editable="false" v-model="$props.event.item.description"/>
+                </StackLayout>
             
             <Button v-if="isPublic" class="Btn" text="Rejoindre" @tap="joinPublicEvent"/>
             <Button v-if="!isPublic" class="Btn" text="Voir" @tap="seeEvent"/>
@@ -54,6 +58,8 @@
 import formatDate from "../utils/formatDate";
   const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
   const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
+  const MDTPicker = require("nativescript-modal-datetimepicker").ModalDatetimepicker;
+  const mDtpicker = new MDTPicker();
   const loader = new LoadingIndicator();
   const options = {
       message: "Ajout de l'évènement",
@@ -74,7 +80,7 @@ import formatDate from "../utils/formatDate";
           joinPublicEvent(){
               let that = this;
               loader.show(options);
-              that.$axios.post("event/join/"+this.event.item.token).then((response) => {
+              that.$axios.post("event/join/public"+this.event.item.token).then((response) => {
                   loader.hide();
                   console.log(response.data);
                   that.closeModal();
@@ -120,7 +126,24 @@ import formatDate from "../utils/formatDate";
         },
 
         save(){
+            console.log("ok")
+            loader.show(options);
+            if(this.nom && this.adresse && this.adresse && this.dateTime){
+                 this.$axios.put("event/" + this.event.item.token, {
+                    name: this.nom, 
+                    date: this.date + " " + this.time,
+                    location: this.adresse,
+                    description: this.description,
+                }).then(response => {
+                    console.log(response);
+                    loader.hide();
+                }).catch((err) => {
+                    console.log(err.response.request._response);
+                    loader.hide();
+                    alert("Une erreur est survenue");
+                })           
             this.isEdit = true;
+            }
         },
 
         selectDate() {
@@ -150,8 +173,9 @@ import formatDate from "../utils/formatDate";
             .catch((error) => {
                 console.log("Error: " + error);
             });
-        },
+        }
       },
+
     data() {
         return {
             isEdit: true,
@@ -160,7 +184,7 @@ import formatDate from "../utils/formatDate";
             description: this.event.item.description,
             dateTime: this.event.item.date,
             date: null,
-            time: null
+            time: null,
         };
     },
 }

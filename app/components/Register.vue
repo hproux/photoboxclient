@@ -1,15 +1,16 @@
 <template lang="html">
   <Page>
-   <ActionBar class="action-bar">
+    <ActionBar class="action-bar">
       <Label class="action-bar-title" text=""></Label>
     </ActionBar>
-    <TabView tabBackgroundColor="transparent" androidSelectedTabHighlightColor="transparent" selectedTabTextColor="transparent"
+    <TabView tabBackgroundColor="transparent" androidSelectedTabHighlightColor="transparent"
+             selectedTabTextColor="transparent"
              tabTextColor="transparent" :selectedIndex="selectedIndex">
       <TabViewItem>
         <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
           <FlexboxLayout class="fullWidth" flexDirection="row">
             <BackArrow/>
-          <Label class="LabelInscritption LabelInscritption1" text="Inscritption"/>
+            <Label class="LabelInscritption LabelInscritption1" text="Inscritption"/>
           </FlexboxLayout>
           <Image class="LogoPhotoBox" src="~/img/logoPhotoBox.png"/>
           <TextField class="TextField TextFieldName" v-model="nom" hint="Nom"/>
@@ -23,11 +24,13 @@
         <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
           <Label class="LabelInscritption" text="Inscritption"/>
           <Image class="LogoPhotoBox" src="~/img/logoPhotoBox.png"/>
-          <TextField class="TextField TextFieldMobile" keyboardType="datetime" v-model="mobile" hint="Téléphone"/>
+          <TextField class="TextField TextFieldMobile" keyboardType="datetime" v-model="mobile"
+                     hint="Téléphone"/>
           <TextField class="TextField2" v-model="pseudo" hint="Pseudo"/>
           <TextField class="TextField2" v-model="mail" hint="Mail"/>
           <TextField class="TextField2" secure="true" v-model="password" hint="Mot de passe"/>
-          <TextField class="TextField2" secure="true" v-model="passwordVerif" hint="Confirmer le mot de passe"/>
+          <TextField class="TextField2" secure="true" v-model="passwordVerif"
+                     hint="Confirmer le mot de passe"/>
 
           <Button class="Btn BtnRetour" text="Retour" @tap="back"/>
           <Button class="Btn BtnRegister" text="Terminer" @tap="register"/>
@@ -42,6 +45,7 @@
   import Login from "./Login.vue";
   import BackArrow from "./BackArrow.vue";
   import formatDate from "../utils/formatDate";
+
   const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
   const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
   const loader = new LoadingIndicator();
@@ -51,64 +55,74 @@
     userInteractionEnabled: false,
   };
   export default {
-    components:{
+    components: {
       BackArrow,
       Login,
     },
-methods: {
-  next(){
-    this.selectedIndex=1;
-  },
-  register(){
-    let that = this;
-    if(that.password!=that.passwordVerif){
-      alert("Les mots de passes ne correspondent pas !");
-      return;
-    }
-    if (that.nom && that.pseudo && that.prenom && that.mobile && that.mail && that.password) {
-      loader.show(options);
-      that.$axios.post("register", {
-        nom: that.nom,
-        prenom: that.prenom,
-        pseudo: that.pseudo,
-        date_naiss: formatDate.dateToYearMonthDay(that.date),
-        tel: that.mobile,
-        mail: that.mail,
-        mdp: that.password
-      }).then((response) => {
-        loader.hide();
-        console.log(response);
-        that.$navigateTo(Login);
-      }).catch((err) => {
-        console.log(err.response.request._response);
-        loader.hide();
-      });
-    } else {
-      alert("Champs non remplis !");
-    }
-  },
-  back: function () {
-    this.selectedIndex = 0;
-  }
-},
-  data() {
-    return {
-      nom: null,
-      prenom: null,
-      mail : null,
-      pseudo : null,
-      password : null,
-      passwordVerif : null,
-      mobile : null,
-      selectedIndex : 0,
-      date: null,
-      maxDate: new Date(),
-    }
-  },
-    created(){
+
+    methods: {
+      onButtonTap() {
+        console.log("Button was pressed");
+      },
+      next() {
+        this.selectedIndex = 1;
+      },
+      register() {
+        let that = this;
+        if (that.password != that.passwordVerif) {
+          alert("Les mots de passes ne correspondent pas !");
+          return;
+        }
+
+        if (that.password.length < 6) {
+          alert("Le mot de passe doit contenir au moins 6 caractères");
+          return;
+        }
+
+        if (that.nom && that.pseudo && that.prenom && that.mobile && that.mail && that.password) {
+          loader.show(options);
+          that.$axios.post("register", {
+            nom: that.nom,
+            prenom: that.prenom,
+            pseudo: that.pseudo,
+            date_naiss: formatDate.dateToDayMonthYear(that.date),
+            tel: that.mobile,
+            mail: that.mail,
+            mdp: that.password
+          }).then((response) => {
+            loader.hide();
+            console.log(response);
+            that.$navigateTo(Login);
+          }).catch((err) => {
+            console.log(err);
+            loader.hide();
+          });
+        } else {
+          alert("Champs non remplis !");
+        }
+      },
+      back: function () {
+        this.selectedIndex = 0;
+      }
+    },
+    data() {
+      return {
+        nom: null,
+        prenom: null,
+        mail: null,
+        pseudo: null,
+        password: null,
+        passwordVerif: null,
+        mobile: null,
+        selectedIndex: 0,
+        date: null,
+        maxDate: new Date(),
+      }
+    },
+    created() {
       this.date = new Date();
     },
-}
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -119,7 +133,7 @@ methods: {
   }
 
   .BtnRetour {
-    margin-top:8%;
+    margin-top: 8%;
     color: white;
     background-color: #604591;
   }
@@ -129,8 +143,8 @@ methods: {
     text-align: center;
   }
 
-  .TextFieldMobile{
-    margin-top:5%;
+  .TextFieldMobile {
+    margin-top: 5%;
   }
 
   .TextField {
@@ -145,7 +159,7 @@ methods: {
     width: 80%;
     placeholder-color: white;
     font-size: 15em;
-    margin-top:2%;
+    margin-top: 2%;
   }
 
   .TextFieldName {
@@ -168,12 +182,13 @@ methods: {
     color: white;
   }
 
-.LabelInscritption1 {
-  margin-left:25%;
-}
-  .datePicker{
-    color:white;
-    placeholder-color:white;
+  .LabelInscritption1 {
+    margin-left: 25%;
+  }
+
+  .datePicker {
+    color: white;
+    placeholder-color: white;
   }
 </style>
 

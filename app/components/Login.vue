@@ -7,7 +7,7 @@
       <Label class="LabelConnexion" text="Connexion"/>
       <Image class="LogoPhotoBox" src="~/img/logoPhotoBox.png" />
       <TextField class="TextField TextFieldId" keyboardType="email" v-model="id" hint="Adresse mail"/>
-      <TextField class="TextField" secure="true" v-model="password" hint="Mot de pass"/>
+      <TextField class="TextField" secure="true" v-model="password" hint="Mot de passe"/>
 
       <Button class="Btn BtnConnexion" text="Se connecter" @tap="login"/>
       <Label class="TagRegister" @tap="register" text="Pas encore de compte ?"/>
@@ -40,8 +40,8 @@
     },
   data() {
     return {
-      id : "chicha@gmail.com",
-      password : "chicha",
+      id : "etienne@gmail.com",
+      password : "etienne",
     }
   },
   methods: {
