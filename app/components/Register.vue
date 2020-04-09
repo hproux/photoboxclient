@@ -84,7 +84,7 @@
             nom: that.nom,
             prenom: that.prenom,
             pseudo: that.pseudo,
-            date_naiss: formatDate.dateToYearMonthDay(that.date),
+            date_naiss: formatDate.dateToDayMonthYear(that.date),
             tel: that.mobile,
             mail: that.mail,
             mdp: that.password

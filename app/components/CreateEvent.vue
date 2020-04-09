@@ -73,14 +73,19 @@ methods: {
   },
   create(){
     let that = this;
+
     if(that.nom && that.adresse && that.description) {
+      if(that.adresse.length<5){
+        alert('L\'adresse doit contenir au moins 5 caractères');
+        return;
+      }
       if(that.time && that.date){
         loader.show(options);
         that.$axios.post("event", {
           name: that.nom,
           date: that.date + " " + that.time,
           location: that.adresse,
-          public: that.public,
+          is_public: that.public,
           description: that.description
         }).then((response) => {
           loader.hide();
