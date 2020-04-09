@@ -17,6 +17,7 @@
             <Switch offBackgroundColor="#614fa5" color="white" class="switch" v-model="public"/>
           </FlexboxLayout>
           <Button class="BtnCreate" text="Créer" @tap="create"/>
+          <ActivityIndicator :busy="isBusy"/>
         </FlexboxLayout>
   </Page>
 </template>
@@ -25,88 +26,84 @@
   import BottomNav from "./BottomNav.vue";
   import BackArrow from "./BackArrow.vue";
   import formatDate from "../utils/formatDate";
-  const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
-  const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
+
   const MDTPicker = require("nativescript-modal-datetimepicker").ModalDatetimepicker;
   const mDtpicker = new MDTPicker();
-
-  const loader = new LoadingIndicator();
-  const options = {
-    message: "Création de l'évènement",
-    details: 'Veuillez patienter...',
-    userInteractionEnabled: false,
-  };
   export default {
-    components:{
+    components: {
       BottomNav,
       BackArrow
     },
-methods: {
-  closeModal(){
-    this.$modal.close();
-  },
-  selectDate() {
-    mDtpicker.pickDate({
-      title: "Choisir la date de l'évènement",
-      minDate: new Date(),
-    }).then((result) => {
-        this.date = formatDate.datePickerToDate(result);
-      this.dateTime = "Date de l'évènement: " + this.date+ " "+this.time;
-      })
-      .catch((error) => {
-        console.log("Error: " + error);
-      });
-  },
-  selectTime() {
-    mDtpicker.pickTime({
-      is24HourView: true,
-      title: "Choisir l'heure de début",
-    }).then((result) => {
-        this.time = formatDate.timePickerToDate(result);
-        this.dateTime = "Date de l'évènement: " + this.date + " "+this.time;
-      })
-      .catch((error) => {
-        console.log("Error: " + error);
-      });
-  },
-  create(){
-    let that = this;
+    methods: {
 
-    if(that.nom && that.adresse && that.description) {
-      if(that.adresse.length<5){
-        alert('L\'adresse doit contenir au moins 5 caractères');
-        return;
-      }
-      if(that.description.length<5){
-        alert('La description doit contenir au moins 5 caractères');
-        return;
-      }
-      if(that.time && that.date){
-        loader.show(options);
-        that.$axios.post("event", {
-          name: that.nom,
-          date: that.date + " " + that.time,
-          location: that.adresse,
-          is_public: that.public,
-          description: that.description
-        }).then((response) => {
-          loader.hide();
-          //console.log(response.data);
-          that.closeModal();
-        }).catch((err) => {
-          console.log(err.response.request._response);
-          loader.hide();
-          alert("Une erreur est survenue");
+      closeModal() {
+        this.$modal.close();
+      },
+      selectDate() {
+        mDtpicker.pickDate({
+          title: "Choisir la date de l'évènement",
+          minDate: new Date(),
+        }).then((result) => {
+          this.date = formatDate.datePickerToDate(result);
+          this.dateTime = "Date de l'évènement: " + this.date + " " + this.time;
         })
-    }else{
-        alert("La date est l'heure n'ont pas étés définis");
-      }
-    }else{
-      alert("Champs non remplis !");
-    }
-  },
-},
-    created(){
+                .catch((error) => {
+                  console.log("Error: " + error);
+                });
+      },
+      selectTime() {
+        mDtpicker.pickTime({
+          is24HourView: true,
+          title: "Choisir l'heure de début",
+        }).then((result) => {
+          this.time = formatDate.timePickerToDate(result);
+          this.dateTime = "Date de l'évènement: " + this.date + " " + this.time;
+        })
+                .catch((error) => {
+                  console.log("Error: " + error);
+                });
+      },
+      create() {
+        let that = this;
+
+        if (that.nom && that.adresse && that.description) {
+          if (that.adresse.length < 5) {
+            alert('L\'adresse doit contenir au moins 5 caractères');
+            return;
+          }
+          if (that.description.length < 5) {
+            alert('La description doit contenir au moins 5 caractères');
+            return;
+          }
+          if (that.time && that.date) {
+            that.isBusy=true;
+            that.$axios.post("event", {
+              name: that.nom,
+              date: that.date + " " + that.time,
+              location: that.adresse,
+              is_public: that.public,
+              description: that.description
+            }).then((response) => {
+              //On recharge les evenements
+              that.$store.commit("loadPublicEventsList", that.$axios);
+              that.$store.commit("loadInvolvedEvents", that.$axios);
+              that.$store.commit("loadMyEvents", that.$axios);
+              that.isBusy=false;
+              that.closeModal();
+            }).catch((err) => {
+              console.log(err.response.request._response);
+              that.isBusy=false;
+              alert("Une erreur est survenue");
+            })
+          } else {
+            alert("La date est l'heure n'ont pas étés définis");
+          }
+        } else {
+          alert("Champs non remplis !");
+        }
+      },
+    },
+    created() {
       this.dateTime = "Date de l'évènement";
       this.date = new Date();
     },
@@ -119,61 +116,61 @@ methods: {
       date: "",
       description : null,
       time : "",
+        isBusy: false,
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
 
-  .LabelPublic{
+  .LabelPublic {
     font-size: 17em;
-    margin-top:2%;
-    color : white;
+    margin-top: 2%;
+    color: white;
   }
 
-  .backArrow{
-      margin-top:3%;
+  .backArrow {
+    margin-top: 3%;
   }
 
-.TextViewDescription{
-  margin-top:15px;
-  border-color : white;
-  border-width: 3px;
-  border-radius: 15px;
-  width:90%;
-  color : white;
-  font-size: 15em;
-  padding-left:10em;
-  placeholder-color: white;
-}
+  .TextViewDescription {
+    margin-top: 15px;
+    border-color: white;
+    border-width: 3px;
+    border-radius: 15px;
+    width: 90%;
+    color: white;
+    font-size: 15em;
+    padding-left: 10em;
+    placeholder-color: white;
+  }
 
   .BtnCreate {
-       width: 80%;
-       border-radius: 100%;
-       color : white;
-       background-color: #614fa5 ;
-       font-size: 20em;
-       margin-top: 5%;
-     }
+    width: 80%;
+    border-radius: 100%;
+    color: white;
+    background-color: #614fa5;
+    font-size: 20em;
+    margin-top: 5%;
+  }
 
   .BtnPicker {
     width: 80%;
     border-radius: 100%;
-    color : #614fa5;
+    color: #614fa5;
     background-color: white;
     font-size: 20em;
     margin-top: 1%;
   }
 
-  .TextFieldName{
-    margin-top:5%;
-      margin-bottom: 3%;
+  .TextFieldName {
+    margin-top: 5%;
+    margin-bottom: 3%;
   }
 
   .TextFieldDate {
-      margin-top: 3%;
-      text-align: center;
+    margin-top: 3%;
+    text-align: center;
   }
 
   .TextField {
@@ -184,8 +181,8 @@ methods: {
   }
 
   .LabelMain {
-    margin-top : 3%;
-    margin-left:15%;
+    margin-top: 3%;
+    margin-left: 15%;
     font-size: 20em;
     color: white;
   }

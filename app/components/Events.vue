@@ -12,7 +12,7 @@
       </TabViewItem>
       <TabViewItem title="Public">
         <Frame>
-        <EventsList :list="list" isPublic="true"/>
+          <EventsList v-if="list" :list="list" isPublic="true"/>
         </Frame>
       </TabViewItem>
     </TabView>
@@ -21,14 +21,6 @@
 
 <script>
 import EventsList from "./EventsList.vue";
-const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
-const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
-const loader = new LoadingIndicator();
-const options = {
-  message: "Récupération des évènements",
-  details: 'Veuillez patienter...',
-  userInteractionEnabled: false,
-};
 
 export default {
   components: {
@@ -40,30 +32,9 @@ export default {
       list: [],
     }
   },
-
-    methods:{
-       getList(){
-        loader.show(options);
-        this.$axios.get("events").then(response => {
-          Object.values(response.data).forEach((data)=>{
-            this.list.push(data);
-          });
-          //console.log(this.list);
-          loader.hide();
-        }).catch((err) => {
-          console.log(err.response.request._response);
-          loader.hide();
-          alert("Une erreur est survenue");
-        });
-       },
-
-       joinPrivateEvent(){
-
-       }
-    },
-
-    mounted(){
-      this.getList();
+    created(){
+      this.$store.commit("loadPublicEventsList", this.$axios);
+      this.list = this.$store.state.publicEvents;
     }
 }
 </script>

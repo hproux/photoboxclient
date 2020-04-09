@@ -40,8 +40,8 @@
     },
   data() {
     return {
-      id : "etienne@gmail.com",
-      password : "etienne",
+      id : null,
+      password : null,
     }
   },
   methods: {
