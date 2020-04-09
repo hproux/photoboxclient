@@ -84,10 +84,6 @@
               is_public: that.public,
               description: that.description
             }).then((response) => {
-              //On recharge les evenements
-              that.$store.commit("loadPublicEventsList", that.$axios);
-              that.$store.commit("loadInvolvedEvents", that.$axios);
-              that.$store.commit("loadMyEvents", that.$axios);
               that.isBusy=false;
               that.closeModal();
             }).catch((err) => {
@@ -107,16 +103,17 @@
       this.dateTime = "Date de l'évènement";
       this.date = new Date();
     },
-  data() {
-    return {
-      nom: null,
-      adresse: null,
-      dateTime : null,
-      public : true,
-      date: "",
-      description : null,
-      time : "",
+    data() {
+      return {
+        nom: null,
+        adresse: null,
+        dateTime : null,
+        public : true,
+        date: "",
+        description : null,
+        time : "",
         isBusy: false,
+      }
     }
   }
 </script>
