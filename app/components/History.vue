@@ -1,7 +1,7 @@
 <template lang="html">
   <Page actionBarHidden="true">
       <Frame>
-        <EventsList v-if="list"  :list="list"/>
+        <EventsList v-if="this.$store.state.reloadHistory"  :list="list"/>
       </Frame>
   </Page>
 </template>
@@ -19,7 +19,7 @@
       },
     data() {
         return {
-            list:[],
+            list:this.$store.state.historyEvent,
         };
     },
 }

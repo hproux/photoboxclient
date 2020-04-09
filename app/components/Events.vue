@@ -12,7 +12,7 @@
       </TabViewItem>
       <TabViewItem title="Public">
         <Frame>
-          <EventsList v-if="list" :list="list" isPublic="true"/>
+          <EventsList v-if="this.$store.state.reloadEvents" :list="list" isPublic="true"/>
         </Frame>
       </TabViewItem>
     </TabView>
@@ -33,7 +33,7 @@ methods:{
 },
   data() {
     return {
-      list: [],
+      list: this.$store.state.publicEvents,
     }
   },
     created(){
