@@ -80,7 +80,7 @@ methods: {
         console.log(response);
         that.$navigateTo(Login);
       }).catch((err) => {
-        console.log(err);
+        console.log(err.response.request._response);
         loader.hide();
       });
     } else {

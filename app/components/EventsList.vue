@@ -28,7 +28,7 @@
   import EventDetail from "./EventDetail";
   import formatDate from "../utils/formatDate";
   export default {
-    props: ['list', 'isPublic'],
+    props: ['list', 'isPublic', 'isOwner'],
     data() {
       return {
       }
@@ -36,7 +36,7 @@
 
   methods: {
     showEventDetail(event){
-      this.$showModal(EventDetail, { fullscreen: true, props: { event: event, isPublic: this.isPublic }});
+      this.$showModal(EventDetail, { fullscreen: true, props: { event: event, isPublic: this.isPublic, isOwner: this.isOwner }});
     },
     transformDate(date){
       let convertedDate = new Date(date)

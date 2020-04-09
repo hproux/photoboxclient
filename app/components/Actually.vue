@@ -6,7 +6,7 @@
                 <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
                         <Label class="LabelEvents" v-model="LabelMyEvents"/>
                     <Frame>
-                        <EventsList :list="myEventsList" height="80%"/>
+                        <EventsList :list="myEventsList" isOwner="true" height="80%"/>
                     </Frame>
                     <Button class="BtnCreate" text="+ Créer" @tap="createEvent"/>
                 </FlexboxLayout>
@@ -72,7 +72,7 @@
              .then((response) => {
                  loader.hide();
                  Object.values(response.data).forEach((data,index)=>{
-                     that.myEventsList.push(data);
+                    that.myEventsList.push(data);
 
                  });
                  that.LabelMyEvents = "Vous organisez "+that.myEventsList.length+" évènements";

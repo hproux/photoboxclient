@@ -32,7 +32,7 @@ base.interceptors.request.use( (config) =>{
 Vue.prototype.$axios = base;
 Vue.use(Vuex);
 
-//Vue.config.silent = TNS_ENV === 'production'
+Vue.config.silent = TNS_ENV === 'production'
 
 new Vue({
     store,
