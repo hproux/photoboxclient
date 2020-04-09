@@ -24,20 +24,33 @@ export default new Vuex.Store({
         token : null,
         memberInfos : null,
         historyEvent:[],
+        publicEvents:[],
+        involvedEvents:[],
+        myEvents:[],
     },
     mutations: {
         setMemberInfos(state, content){
             state.token = content.token;
             state.memberInfos = content;
         },
-        loadAllComponents(state){
-
-        },
-        loadPublicEventsList(state){
-
+        loadPublicEventsList(state, axios){
+            let options = {
+                message: "Récupération des évènements publics",
+                details: 'Veuillez patienter...',
+                userInteractionEnabled: false,
+            };
+            loader.show(options);
+            axios.get("events").then(response => {
+                state.publicEvents = Object.values(response.data);
+                loader.hide();
+            }).catch((err) => {
+                console.log(err.response.request._response);
+                loader.hide();
+                alert("Une erreur est survenue");
+            });
         },
         loadHistoryEventsList(state, axios){
-            const options = {
+           let options = {
                 message: "Récupération de l'historique",
                 details: 'Veuillez patienter...',
                 userInteractionEnabled: false,
@@ -51,6 +64,40 @@ export default new Vuex.Store({
                 loader.hide();
                 alert("Une erreur est survenue");
             });
+        },
+        loadInvolvedEvents(state, axios){
+            let options = {
+                message: "Chargement des évènements",
+                details: 'Veuillez patienter...',
+                userInteractionEnabled: false,
+            };
+            //Involved events
+            loader.show(options);
+            axios.get("events/involved")
+                .then((response) => {
+                    state.involvedEvents = Object.values(response.data);
+                }).catch((err) => {
+                console.log(err.response.request._response);
+                alert("Une erreur est survenue");
+            })
+        },
+        loadMyEvents(state, axios){
+            let options = {
+                message: "Chargement de vos évènements",
+                details: 'Veuillez patienter...',
+                userInteractionEnabled: false,
+            };
+            //created events
+            loader.show(options);
+            axios.get("events/created")
+                .then((response) => {
+                    loader.hide();
+                    state.myEvents = Object.values(response.data);
+                }).catch((err) => {
+                console.log(err.response.request._response);
+                loader.hide();
+                alert("Une erreur est survenue");
+            })
         }
 
 

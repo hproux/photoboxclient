@@ -6,7 +6,7 @@
                 <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
                         <Label class="LabelEvents" v-model="LabelMyEvents"/>
                     <Frame>
-                        <EventsList :list="myEventsList" height="80%"/>
+                        <EventsList v-if="myEventsList" :list="myEventsList" height="80%"/>
                     </Frame>
                     <Button class="BtnCreate" text="+ Créer" @tap="createEvent"/>
                 </FlexboxLayout>
@@ -15,7 +15,7 @@
                 <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
                 <Label class="LabelEvents" v-model="LabelInvolvedEvents"/>
                 <Frame>
-                    <EventsList :list="involvedEventsList" height="80%"/>
+                    <EventsList v-if="involvedEventsList" :list="involvedEventsList" height="80%"/>
                 </Frame>
                 </FlexboxLayout>
 
@@ -27,14 +27,6 @@
 <script>
     import CreateEvent from "./CreateEvent.vue";
     import EventsList from "./EventsList.vue";
-    const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
-    const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
-    const loader = new LoadingIndicator();
-    const options = {
-        message: "Chargement des évènements",
-        details: 'Veuillez patienter...',
-        userInteractionEnabled: false,
-    };
     export default {
     components: {
         CreateEvent,
@@ -54,33 +46,15 @@
         };
     },
      created(){
-        let that = this;
-        loader.show(options);
-        //Involved events
-         that.$axios.get("events/involved")
-             .then((response) => {
-                 Object.values(response.data).forEach((data,index)=>{
-                     that.involvedEventsList.push(data);
-                 });
-                 that.LabelInvolvedEvents = "Vous participez à "+that.involvedEventsList.length+" évènements";
-             }).catch((err) => {
-             console.log(err.response.request._response);
-             alert("Une erreur est survenue");
-         })
-         //My Events
-         that.$axios.get("events/created")
-             .then((response) => {
-                 loader.hide();
-                 Object.values(response.data).forEach((data,index)=>{
-                     that.myEventsList.push(data);
+        this.$store.commit("loadInvolvedEvents", this.$axios);
+         this.involvedEventsList = this.$store.state.involvedEvents;
+         this.LabelInvolvedEvents = "Vous participez à "+this.involvedEventsList.length+" évènements";
 
-                 });
-                 that.LabelMyEvents = "Vous organisez "+that.myEventsList.length+" évènements";
-             }).catch((err) => {
-             console.log(err.response.request._response);
-             loader.hide();
-             alert("Une erreur est survenue");
-         })
+         //My Events
+         this.$store.commit("loadMyEvents", this.$axios);
+         this.myEventsList = this.$store.state.myEvents;
+         this.LabelMyEvents = "Vous organisez "+this.myEventsList.length+" évènements";
+
       },
  }
 </script>
