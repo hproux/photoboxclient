@@ -23,10 +23,6 @@ export default new Vuex.Store({
     state: {
         token : null,
         memberInfos : null,
-        historyEvent:[],
-        publicEvents:[],
-        involvedEvents:[],
-        myEvents:[],
     },
     mutations: {
         setMemberInfos(state, content){

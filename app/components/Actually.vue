@@ -6,7 +6,7 @@
                 <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
                         <Label class="LabelEvents" v-model="LabelMyEvents"/>
                     <Frame>
-                        <EventsList v-if="this.$store.state.myEvents" :list="this.$store.state.myEvents" height="80%"/>
+                        <EventsList v-if="involvedEventsList" :list="involvedEventsList" height="80%"/>
                     </Frame>
                     <Button class="BtnCreate" text="+ Créer" @tap="createEvent"/>
                 </FlexboxLayout>
@@ -15,7 +15,7 @@
                 <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
                 <Label class="LabelEvents" v-model="LabelInvolvedEvents"/>
                 <Frame>
-                    <EventsList v-if="this.$store.state.involvedEvents" :list="this.$store.state.involvedEvents" height="80%"/>
+                    <EventsList v-if="myEventsList" :list="myEventsList" height="80%"/>
                 </Frame>
                 </FlexboxLayout>
 
@@ -45,6 +45,8 @@
         return {
             LabelInvolvedEvents:null,
             LabelMyEvents:null,
+            involvedEventsList : [],
+            myEventsList : [],
         };
     },
      created(){
@@ -57,9 +59,8 @@
          loader.show(options);
          this.$axios.get("events/involved")
              .then((response) => {
-                 this.$store.state.involvedEvents = Object.values(response.data);
+                 this.involvedEventsList = Object.values(response.data);
                  this.LabelInvolvedEvents = "Vous participez à "+this.involvedEventsList.length+" évènements";
-
              }).catch((err) => {
              console.log(err.response.request._response);
              alert("Une erreur est survenue");
@@ -69,7 +70,7 @@
          this.$axios.get("events/created")
              .then((response) => {
                  loader.hide();
-                 this.$store.state.myEvents = Object.values(response.data);
+                 this.myEventsList = Object.values(response.data);
                  this.LabelMyEvents = "Vous organisez "+this.myEventsList.length+" évènements";
              }).catch((err) => {
              console.log(err.response.request._response);

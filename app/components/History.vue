@@ -1,7 +1,7 @@
 <template lang="html">
   <Page actionBarHidden="true">
       <Frame>
-        <EventsList v-if="this.$store.state.historyEvent"  :list="this.$store.state.historyEvent"/>
+        <EventsList v-if="historyEvent" :list="historyEvent"/>
       </Frame>
   </Page>
 </template>
@@ -16,6 +16,11 @@
     components: {
       EventsList
     },
+      data(){
+        return{
+            historyEvent : [],
+          }
+      },
       created(){
           let options = {
               message: "Récupération de l'historique",
@@ -24,7 +29,7 @@
           };
           loader.show(options);
           this.$axios.get("events/history").then(response => {
-              this.$store.state.historyEvent = Object.values(response.data);
+              this.historyEvent = Object.values(response.data);
               loader.hide();
           }).catch((err) => {
               console.log(err.response.request._response);

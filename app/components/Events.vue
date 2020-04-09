@@ -12,7 +12,7 @@
       </TabViewItem>
       <TabViewItem title="Public">
         <Frame>
-          <EventsList v-if="this.$store.state.publicEvents" :list="this.$store.state.publicEvents" isPublic="true"/>
+          <EventsList v-if="publicEvents" :list="publicEvents" isPublic="true"/>
         </Frame>
       </TabViewItem>
     </TabView>
@@ -29,27 +29,32 @@ export default {
   components: {
       EventsList
     },
-methods:{
-  joinPrivateEvent(){
-
-  },
-},
-    created(){
-      let options = {
-        message: "Récupération des évènements publics",
-        details: 'Veuillez patienter...',
-        userInteractionEnabled: false,
-      };
-      loader.show(options);
-      this.$axios.get("events").then(response => {
-        this.$store.state.publicEvents = Object.values(response.data);
-        loader.hide();
-      }).catch((err) => {
-        console.log(err.response.request._response);
-        loader.hide();
-        alert("Une erreur est survenue");
-      });
+  data(){
+    return{
+      publicEvents:[],
     }
+  },
+  methods:{
+    joinPrivateEvent(){
+
+    },
+  },
+  created(){
+    let options = {
+      message: "Récupération des évènements publics",
+      details: 'Veuillez patienter...',
+      userInteractionEnabled: false,
+    };
+    loader.show(options);
+    this.$axios.get("events").then(response => {
+      this.publicEvents = Object.values(response.data);
+      loader.hide();
+    }).catch((err) => {
+      console.log(err.response.request._response);
+      loader.hide();
+      alert("Une erreur est survenue");
+    });
+  }
 }
 </script>
 
