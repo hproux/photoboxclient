@@ -1,28 +1,53 @@
 <template lang="html">
     <Page actionBarHidden="true">
-        <StackLayout>
-            <Image class="backArrow" @tap="closeModal" src="~/img/left-arrow.png" stretch="none"/>
+        <StackLayout v-if="isEdit">
+            <FlexboxLayout v-if="isOwner" justifyContent="space-between">
+                <Image class="backArrow" @tap="closeModal" src="~/img/left-arrow.png" stretch="none"/>
+                <Image class="ImgEdit" @tap="edit" horizontalAlignment="right" src="~/img/pen.png"/>
+            </FlexboxLayout>
+
+            <Image v-else class="backArrow" @tap="closeModal" src="~/img/left-arrow.png" stretch="none"/>
+
             <StackLayout class="bordered">
                 <Image class="ImgEvent" src="~/img/user.png"/>
             </StackLayout>
 
             <Label horizontalAlignment="center" class="Label LabelNom" v-model="$props.event.item.name"/>
-
-            <FlexboxLayout class="infos" flexDirection="row" justifyContent="space-between">
-                <FlexboxLayout flexDirection="row">
-                    <Image class="ImgPin" src="~/img/pin.png"/>
-                    <Label horizontalAlignment="center" class="Label" v-model="$props.event.item.location"/>
+            
+            <StackLayout class="main">
+                <FlexboxLayout class="infos" flexDirection="row" justifyContent="space-between">
+                    <FlexboxLayout flexDirection="row">
+                        <Image class="ImgPin" src="~/img/pin.png"/>
+                        <Label horizontalAlignment="center" class="Label" color="#DDD" v-model="$props.event.item.location"/>
+                    </FlexboxLayout>
+                    <Label horizontalAlignment="center" class="Label" color="#DDD" :text="transformDate(event.item.date)"/>
                 </FlexboxLayout>
-                <Label horizontalAlignment="center" class="Label" :text="transformDate(event.item.date)"/>
-            </FlexboxLayout>
 
-            <StackLayout>
-                <TextView class="TextView" editable="false" v-model="$props.event.item.description"/>
-            </StackLayout>
-
+                <StackLayout>
+                    <TextView class="TextView" editable="false" v-model="$props.event.item.description"/>
+                </StackLayout>
+            
             <Button v-if="isPublic" class="Btn" text="Rejoindre" @tap="joinPublicEvent"/>
             <Button v-if="!isPublic" class="Btn" text="Voir" @tap="seeEvent"/>
+            <Button v-if="isOwner" class="Btn" text="Supprimer" @tap="deleteMyEvent"/>
+
+            </StackLayout>
         </StackLayout>
+
+        <FlexboxLayout alignItems="center" justifyContent="center" v-else>
+            <StackLayout>
+                <TextField class="TextField TextFieldName" v-model="nom"/>
+                <TextField class="TextField" v-model="adresse"/>
+            
+                <Label class="TextField TextFieldDate" :text="dateTime"/>
+                <Button class="BtnPicker" text="Choisir une date" @tap="selectDate"/>
+                <Button class="BtnPicker" text="Choisir une heure" @tap="selectTime"/>
+
+                <TextView class="TextViewDescription" v-model="description"/>
+
+                <Button class="Btn" text="Sauvegarder" @tap="save"/>
+            </StackLayout>               
+        </FlexboxLayout>
     </Page>
 </template>
 
@@ -33,6 +58,8 @@
 import formatDate from "../utils/formatDate";
   const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
   const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
+  const MDTPicker = require("nativescript-modal-datetimepicker").ModalDatetimepicker;
+  const mDtpicker = new MDTPicker();
   const loader = new LoadingIndicator();
   const options = {
       message: "Ajout de l'évènement",
@@ -40,7 +67,7 @@ import formatDate from "../utils/formatDate";
       userInteractionEnabled: false,
   };
   export default {
-    props: ['event', 'isPublic'],
+    props: ['event', 'isPublic', 'isOwner'],
     components: {
         BackArrow,
         BottomNav,
@@ -59,24 +86,105 @@ import formatDate from "../utils/formatDate";
                   that.closeModal();
                   that.$navigateTo(BottomNav);
 
-              }).catch((err) => {
-                  console.log(err.response.request._response);
-                  loader.hide();
-                  alert("Une erreur est survenue");
-              })
-          },
+            }).catch((err) => {
+                console.log(err.response.request._response);
+                loader.hide();
+                alert("Une erreur est survenue");
+            })
+        },
 
         transformDate(date){
             let convertedDate = new Date(date)
             return formatDate.dateToYearMonthDay(convertedDate);
         },
-          seeEvent(){
-              this.closeModal();
-              this.$showModal(TakePhoto, { fullscreen: true, props: { event: this.event }});
+
+        seeEvent(){
+            this.closeModal();
+            this.$showModal(TakePhoto, { fullscreen: true, props: { event: this.event }});
+        },
+
+        deleteMyEvent(){
+            let dialogs = require("tns-core-modules/ui/dialogs");
+            dialogs.confirm("Etes vous sur de vouloir surrpimer cet événement ?").then( (result) => {
+                loader.show(options);
+                this.$axios.delete("event/" + this.event.item.token).then((response) => {
+                    loader.hide();
+                    console.log(response.data);
+                    this.closeModal();
+                    that.$navigateTo(BottomNav);
+
+                }).catch((err) => {
+                    console.log(err.response.request._response);
+                    loader.hide();
+                    alert("Une erreur est survenue");
+                })
+            });
           },
+
+        edit(){
+            this.isEdit = false;
+        },
+
+        save(){
+            console.log("ok")
+            loader.show(options);
+            if(this.nom && this.adresse && this.adresse && this.dateTime){
+                 this.$axios.put("event/" + this.event.item.token, {
+                    name: this.nom, 
+                    date: this.date + " " + this.time,
+                    location: this.adresse,
+                    description: this.description,
+                }).then(response => {
+                    console.log(response);
+                    loader.hide();
+                }).catch((err) => {
+                    console.log(err.response.request._response);
+                    loader.hide();
+                    alert("Une erreur est survenue");
+                })           
+            this.isEdit = true;
+            }
+        },
+
+        selectDate() {
+            mDtpicker.pickDate({
+            title: "Choisir la date de l'évènement",
+            minDate: new Date(),
+            }).then((result) => {
+                this.date = result.day + "/" + result.month + "/" + result.year;
+            this.dateTime = "Date de l'évènement: " + this.date+ " "+this.time;
+
+            console.log("Date is: " + result.day + "-" + result.month + "-" + result.year);
+            })
+            .catch((error) => {
+                console.log("Error: " + error);
+            });
+        },
+
+        selectTime() {
+            mDtpicker.pickTime({
+            is24HourView: true,
+            title: "Choisir l'heure de début",
+            }).then((result) => {
+                this.time = result.hour + ":" + result.minute;
+                this.dateTime = "Date de l'évènement: " + this.date + " "+this.time;
+                console.log("Time is: " + result.hour + ":" + result.minute);
+            })
+            .catch((error) => {
+                console.log("Error: " + error);
+            });
+        }
       },
+
     data() {
         return {
+            isEdit: true,
+            nom: this.event.item.name,
+            adresse: this.event.item.location,
+            description: this.event.item.description,
+            dateTime: this.event.item.date,
+            date: null,
+            time: null,
         };
     },
 }
@@ -84,13 +192,11 @@ import formatDate from "../utils/formatDate";
 
 <style lang="scss" scoped>
     .Btn{
-        width : 90%;
         border-radius: 100%;
         font-size: 20em;
-        margin-top: 25%;
-        margin-bottom: 2%;
         color : white;
         background-color: #604591;
+        margin-top: 150px;
     }
 
     .ImgPin{
@@ -108,6 +214,11 @@ import formatDate from "../utils/formatDate";
         border-radius: 100%;
         width: 400px;
 
+    }
+
+    .main{
+        margin: auto;
+        width: 90%;
     }
     .Label{
         color:white;
@@ -127,8 +238,13 @@ import formatDate from "../utils/formatDate";
     .TextView{
         border-width: 0;
         color: white;
-        font-size:18em;
+        font-size:20em;
+    }
 
+    .ImgEdit{
+        margin-right:5%;
+        margin-top:5%;
+        width:128px;
     }
 
 </style>
