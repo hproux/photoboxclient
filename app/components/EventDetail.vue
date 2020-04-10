@@ -151,15 +151,15 @@ import formatDate from "../utils/formatDate";
                     location: this.adresse,
                     description: this.description,
                 }).then(response => {
-                    console.log(response);
                     loader.hide();
+                    this.isEdit = true;
+                    this.$store.commit('toggleRefresh');
+                    this.closeModal();
                 }).catch((err) => {
                     console.log(err.response.request._response);
                     loader.hide();
                     alert("Une erreur est survenue");
                 })
-            this.isEdit = true;
-            this.closeModal();
             }
         },
 

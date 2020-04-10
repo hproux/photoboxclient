@@ -23,11 +23,20 @@ export default new Vuex.Store({
     state: {
         token : null,
         memberInfos : null,
+        refresh: false,
     },
     mutations: {
         setMemberInfos(state, content){
             state.token = content.token;
             state.memberInfos = content;
         },
+
+        toggleRefresh(state){
+            if(state.refresh == true){
+                state.refresh = false;
+            } else {
+                state.refresh = true;
+            }
+        }
     }
 });

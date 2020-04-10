@@ -6,7 +6,7 @@
                 <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
                         <Label class="LabelEvents" v-model="LabelMyEvents"/>
                     <Frame>
-                        <EventsList v-if="myEventsList" :list="myEventsList" isOwner="true" height="80%"/>
+                        <EventsList v-if="myEventsList && renderComponent" :list="myEventsList" isOwner="true" height="80%"/>
                     </Frame>
                     <Button class="BtnCreate" text="+ Créer" @tap="createEvent"/>
                 </FlexboxLayout>
@@ -41,23 +41,37 @@
         CreateEvent,
         EventsList,
     },
+
+    computed: {
+        check() {
+            return this.$store.state.refresh
+        }
+    },
+
+    watch: {
+        check: function () {
+            this.renderComponent = false;
+            this.loadCreatedEvents()
+        }
+    },
+
     methods:{
         createEvent(){
             this.$showModal(CreateEvent, { fullscreen: true});
         },
 
         loadInvolvedEvents(){
-             //Involved events
-         loader.show(options);
-         this.$axios.get("events/involved")
-             .then((response) => {
+        //Involved events
+        loader.show(options);
+        this.$axios.get("events/involved")
+            .then((response) => {
                 loader.hide();
-                 this.involvedEventsList = Object.values(response.data);
-                 this.LabelInvolvedEvents = "Vous participez à "+this.involvedEventsList.length+" évènements";
-             }).catch((err) => {
-             console.log(err.response.request._response);
+                this.involvedEventsList = Object.values(response.data);
+                this.LabelInvolvedEvents = "Vous participez à "+this.involvedEventsList.length+" évènements";
+            }).catch((err) => {
+            console.log(err.response.request._response);
             loader.hide();
-             alert("Une erreur est survenue");
+            alert("Une erreur est survenue");
          })
         },
 
@@ -68,6 +82,12 @@
                     loader.hide();
                     this.myEventsList = Object.values(response.data);
                     this.LabelMyEvents = "Vous organisez "+this.myEventsList.length+" évènements";
+                    //force render composant
+                    if(this.renderComponent == false){
+                        this.$nextTick(() => {
+                            this.renderComponent = true;
+                        });
+                    }
                 }).catch((err) => {
                 console.log(err.response.request._response);
                 loader.hide();
@@ -80,8 +100,9 @@
         return {
             LabelInvolvedEvents:null,
             LabelMyEvents:null,
-            involvedEventsList : [],
-            myEventsList : [],
+            involvedEventsList: [],
+            myEventsList: [],
+            renderComponent: true,
         };
     },
      created(){
