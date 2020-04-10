@@ -6,7 +6,7 @@
                 <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
                         <Label class="LabelEvents" v-model="LabelMyEvents"/>
                     <Frame>
-                        <EventsList v-if="involvedEventsList" :list="involvedEventsList" height="80%"/>
+                        <EventsList v-if="myEventsList" :list="myEventsList" height="80%"/>
                     </Frame>
                     <Button class="BtnCreate" text="+ Créer" @tap="createEvent"/>
                 </FlexboxLayout>
@@ -15,7 +15,7 @@
                 <FlexboxLayout alignItems="center" alignContent="center" flexDirection="column">
                 <Label class="LabelEvents" v-model="LabelInvolvedEvents"/>
                 <Frame>
-                    <EventsList v-if="myEventsList" :list="myEventsList" height="80%"/>
+                    <EventsList v-if="involvedEventsList" :list="involvedEventsList" height="80%"/>
                 </Frame>
                 </FlexboxLayout>
 

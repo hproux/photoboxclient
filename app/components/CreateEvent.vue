@@ -26,13 +26,15 @@
   import BottomNav from "./BottomNav.vue";
   import BackArrow from "./BackArrow.vue";
   import formatDate from "../utils/formatDate";
+  import ReloadComponent from "./ReloadComponent";
 
   const MDTPicker = require("nativescript-modal-datetimepicker").ModalDatetimepicker;
   const mDtpicker = new MDTPicker();
   export default {
     components: {
       BottomNav,
-      BackArrow
+      BackArrow,
+      ReloadComponent
     },
     methods: {
 
@@ -93,6 +95,7 @@
                 alert("Votre clé privée: "+response.data.eventpass);
               }
               that.closeModal();
+              this.navigateTo(ReloadComponent);
             }).catch((err) => {
               console.log(err.response.request._response);
               that.isBusy=false;
