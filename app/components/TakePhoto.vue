@@ -114,8 +114,16 @@ export default {
     },
     addComment(){
       if(this.comment!=null || this.comment!=""){
-        //Ajouter traitement API
-        this.comment = "";
+        this.$axios.post("event/comment/"+this.event.item.token, {
+          comment: this.comment,
+        }).then((response) => {
+          console.log(response.data);
+          this.comment = "";
+        }).catch((err) => {
+          console.log(err.response.request._response);
+          loader.hide();
+          alert("Une erreur est survenue");
+        })
       }else{
         alert("Veuillez écrire un commentaire!");
       }
