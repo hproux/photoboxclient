@@ -20,14 +20,14 @@
                         <Image class="ImgPin" src="~/img/pin.png"/>
                         <Label horizontalAlignment="center" class="Label" color="#DDD" v-model="$props.event.item.location"/>
                     </FlexboxLayout>
-                    <Label horizontalAlignment="center" class="Label" color="#DDD" :text="transformDate(event.item.date)"/>
+                    <Label horizontalAlignment="center" class="Label" color="#DDD" :text="event.item.date"/>
                 </FlexboxLayout>
 
                 <StackLayout>
                     <TextView class="TextView" editable="false" v-model="$props.event.item.description"/>
                 </StackLayout>
 
-            <Button v-if="isPublic==true" class="Btn" text="Rejoindre" @tap="joinPublicEvent"/>
+            <Button v-if="isPublic && !download" class="Btn" text="Rejoindre" @tap="joinPublicEvent"/>
             <Button v-if="!isPublic" class="Btn" text="Voir" @tap="seeEvent"/>
             <Button v-if="download" class="Btn" text="Télécharger les images" @tap="downloadArchive"/>
             <Button v-if="isOwner" class="Btn" text="Supprimer" @tap="deleteMyEvent"/>
@@ -82,7 +82,7 @@ import formatDate from "../utils/formatDate";
           joinPublicEvent(){
               let that = this;
               loader.show(options);
-              that.$axios.post("event/join/public"+this.event.item.token).then((response) => {
+              that.$axios.post("event/join/public/"+this.event.item.token).then((response) => {
                   loader.hide();
                   console.log(response.data);
                   that.closeModal();
