@@ -121,7 +121,6 @@ export default {
           this.comment = "";
         }).catch((err) => {
           console.log(err.response.request._response);
-          loader.hide();
           alert("Une erreur est survenue");
         })
       }else{
