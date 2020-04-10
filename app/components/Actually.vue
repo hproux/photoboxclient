@@ -30,6 +30,11 @@
     const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
     const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
     const loader = new LoadingIndicator();
+    const options = {
+            message: "Chargement des évènements",
+            details: 'Veuillez patienter...',
+            userInteractionEnabled: false,
+        };
 
     export default {
     components: {
@@ -39,7 +44,37 @@
     methods:{
         createEvent(){
             this.$showModal(CreateEvent, { fullscreen: true});
-        }
+        },
+
+        loadInvolvedEvents(){
+             //Involved events
+         loader.show(options);
+         this.$axios.get("events/involved")
+             .then((response) => {
+                loader.hide();
+                 this.involvedEventsList = Object.values(response.data);
+                 this.LabelInvolvedEvents = "Vous participez à "+this.involvedEventsList.length+" évènements";
+             }).catch((err) => {
+             console.log(err.response.request._response);
+            loader.hide();
+             alert("Une erreur est survenue");
+         })
+        },
+
+        loadCreatedEvents(){
+            //created events
+            this.$axios.get("events/created")
+                .then((response) => {
+                    loader.hide();
+                    this.myEventsList = Object.values(response.data);
+                    this.LabelMyEvents = "Vous organisez "+this.myEventsList.length+" évènements";
+                }).catch((err) => {
+                console.log(err.response.request._response);
+                loader.hide();
+                alert("Une erreur est survenue");
+            })
+        },
+
     },
     data(){
         return {
@@ -50,33 +85,11 @@
         };
     },
      created(){
-         let options = {
-             message: "Chargement des évènements",
-             details: 'Veuillez patienter...',
-             userInteractionEnabled: false,
-         };
-         //Involved events
-         loader.show(options);
-         this.$axios.get("events/involved")
-             .then((response) => {
-                 this.involvedEventsList = Object.values(response.data);
-                 this.LabelInvolvedEvents = "Vous participez à "+this.involvedEventsList.length+" évènements";
-             }).catch((err) => {
-             console.log(err.response.request._response);
-             alert("Une erreur est survenue");
-         })
+        this.loadInvolvedEvents();
+        this.loadCreatedEvents();
+        
 
-         //created events
-         this.$axios.get("events/created")
-             .then((response) => {
-                 loader.hide();
-                 this.myEventsList = Object.values(response.data);
-                 this.LabelMyEvents = "Vous organisez "+this.myEventsList.length+" évènements";
-             }).catch((err) => {
-             console.log(err.response.request._response);
-             loader.hide();
-             alert("Une erreur est survenue");
-         })
+         
       },
  }
 </script>

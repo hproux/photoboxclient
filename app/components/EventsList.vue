@@ -40,7 +40,7 @@
     },
     transformDate(date){
       return date.split(' ')[0];
-    }
+    },
   },
 }
 </script>
