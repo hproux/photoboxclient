@@ -92,8 +92,8 @@ import formatDate from "../utils/formatDate";
         },
 
         transformDate(date){
-            let convertedDate = new Date(date)
-            return formatDate.dateToYearMonthDay(convertedDate);
+            return date.split(' ')[0];
+
         },
 
         seeEvent(){
@@ -124,9 +124,13 @@ import formatDate from "../utils/formatDate";
         },
 
         save(){
-            console.log("ok")
             loader.show(options);
-            if(this.nom && this.adresse && this.adresse && this.dateTime){
+            if(this.nom && this.adresse && this.adresse && this.dateTime ){
+                if(!this.date || !this.time){
+                    let tabDate = this.dateTime.split(' ');
+                    this.date = tabDate[0];
+                    this.time = tabDate[1];
+                }
                  this.$axios.put("event/" + this.event.item.token, {
                     name: this.nom, 
                     date: this.date + " " + this.time,
@@ -141,6 +145,7 @@ import formatDate from "../utils/formatDate";
                     alert("Une erreur est survenue");
                 })           
             this.isEdit = true;
+            this.closeModal();
             }
         },
 
