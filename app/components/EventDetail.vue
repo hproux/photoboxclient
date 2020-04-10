@@ -121,7 +121,7 @@ import formatDate from "../utils/formatDate";
                 loader.show(options);
                 this.$axios.delete("event/" + this.event.item.token).then((response) => {
                     loader.hide();
-                    console.log(response.data);
+                    this.$store.commit('toggleRefresh');
                     this.closeModal();
                     that.$navigateTo(BottomNav);
 
