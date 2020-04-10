@@ -11,7 +11,7 @@
 
       <AbsoluteLayout class="MsgBox">
         <Image class="Img" :src="lastImg"/>
-        <Label class="Label LabelNom" v-model="this.lastMessage"/>
+        <Label class="LabelComment" v-model="this.lastMessage"/>
       </AbsoluteLayout>
       <TextView class="TextViewComment" hint="Votre commentaire..." v-model="comment"/>
       <Button text="Ajouter commentaire" class="BtnAddComment" @tap="addComment"  padding="10"/>
@@ -165,6 +165,13 @@ export default {
       margin-left:16%;
   }
 
+  .LabelComment{
+    color:white;
+    font-size:17em;
+    overflow: auto;
+    text-overflow: ellipsis;
+  }
+
   .Btn{
     width : 90%;
     border-radius: 100%;
@@ -185,7 +192,7 @@ export default {
 
   .Img{
     /*width:95%;*/
-    height:50%;
+    height:60%;
   }
 
   .TextViewComment{
@@ -204,7 +211,9 @@ export default {
     color:white;
   }
 
-  .MsgBox{
-
+  .MsgBox *{
+    /*margin-left:2%;*/
+    text-align: center;
+    width:100%;
   }
 </style>
