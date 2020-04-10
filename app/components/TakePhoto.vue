@@ -8,7 +8,11 @@
         <Image v-if="lastImg" class="backArrow" @tap="closeModal" src="~/img/left-arrow.png" stretch="none"/>
         <Label class="Label LabelNom" v-model="$props.event.item.name"/>
       </FlexboxLayout>
-      <Image class="Img" :src="lastImg"/>
+
+      <AbsoluteLayout class="MsgBox">
+        <Image class="Img" :src="lastImg"/>
+        <Label class="Label LabelNom" v-model="this.lastMessage"/>
+      </AbsoluteLayout>
       <TextView class="TextViewComment" hint="Votre commentaire..." v-model="comment"/>
       <Button text="Ajouter commentaire" class="BtnAddComment" @tap="addComment"  padding="10"/>
 
@@ -46,6 +50,7 @@ export default {
       base64 : null,
       lastImg:null,
       loaderImg : null,
+      lastMessage : null,
     }
   },
   created(){
@@ -53,7 +58,8 @@ export default {
     this.getLastEventImage();
     loader.hide();
     this.loaderImg = timerModule.setInterval(() => {
-      console.log("Chargement de la derniere image");
+      console.log("Chargement de la derniere image / dernier commentaire");
+      this.getLastEventComment();
       this.getLastEventImage();
     }, 5000)
   },
@@ -107,6 +113,16 @@ export default {
       that.$axios.get("event/picture/last/"+that.event.item.token
       ).then((response) => {
         that.lastImg = this.$axios.defaults.baseURL + response.data.picture.URI;
+      }).catch((err) => {
+        console.log(err.response.request._response);
+        alert("Une erreur est survenue");
+      })
+    },
+    getLastEventComment(){
+      let that = this;
+      that.$axios.get("event/comment/last/"+that.event.item.token
+      ).then((response) => {
+        that.lastMessage = response.data.pseudo + ": "+ response.data.comment;
       }).catch((err) => {
         console.log(err.response.request._response);
         alert("Une erreur est survenue");
@@ -186,5 +202,9 @@ export default {
 
   .TextViewComment::placeholder{
     color:white;
+  }
+
+  .MsgBox{
+
   }
 </style>
