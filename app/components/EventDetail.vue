@@ -13,7 +13,7 @@
             </StackLayout>
 
             <Label horizontalAlignment="center" class="Label LabelNom" v-model="$props.event.item.name"/>
-            
+
             <StackLayout class="main">
                 <FlexboxLayout class="infos" flexDirection="row" justifyContent="space-between">
                     <FlexboxLayout flexDirection="row">
@@ -26,26 +26,27 @@
                 <StackLayout>
                     <TextView class="TextView" editable="false" v-model="$props.event.item.description"/>
                 </StackLayout>
-            
-            <Button v-if="isPublic" class="Btn" text="Rejoindre" @tap="joinPublicEvent"/>
+
+            <Button v-if="isPublic==true" class="Btn" text="Rejoindre" @tap="joinPublicEvent"/>
             <Button v-if="!isPublic" class="Btn" text="Voir" @tap="seeEvent"/>
+            <Button v-if="download" class="Btn" text="Télécharger les images" @tap="downloadArchive"/>
             <Button v-if="isOwner" class="Btn" text="Supprimer" @tap="deleteMyEvent"/>
 
             </StackLayout>
         </StackLayout>
 
-                <StackLayout v-else class="edit">
-                    <TextField class="input" v-model="nom"/>
-                    <TextField class="input" v-model="adresse"/>
-                
-                    <Label class="lbl" :text="dateTime"/>
-                    <Button class="" text="Choisir une date" @tap="selectDate"/>
-                    <Button class="" text="Choisir une heure" @tap="selectTime"/>
+        <StackLayout v-else class="edit">
+            <TextField class="input" v-model="nom"/>
+            <TextField class="input" v-model="adresse"/>
 
-                    <TextView class="input" v-model="description"/>
+            <Label class="lbl" :text="dateTime"/>
+            <Button class="" text="Choisir une date" @tap="selectDate"/>
+            <Button class="" text="Choisir une heure" @tap="selectTime"/>
 
-                    <Button class="Btn" text="Sauvegarder" @tap="save"/>
-                </StackLayout>               
+            <TextView class="input" v-model="description"/>
+
+            <Button class="Btn" text="Sauvegarder" @tap="save"/>
+        </StackLayout>
     </Page>
 </template>
 
@@ -65,13 +66,16 @@ import formatDate from "../utils/formatDate";
       userInteractionEnabled: false,
   };
   export default {
-    props: ['event', 'isPublic', 'isOwner'],
+    props: ['event', 'isPublic', 'isOwner', 'download'],
     components: {
         BackArrow,
         BottomNav,
         TakePhoto
     },
       methods:{
+          downloadArchive(){
+
+          },
           closeModal(){
               this.$modal.close();
           },
@@ -128,7 +132,7 @@ import formatDate from "../utils/formatDate";
             loader.show(options);
             if(this.nom && this.adresse && this.adresse && this.dateTime){
                  this.$axios.put("event/" + this.event.item.token, {
-                    name: this.nom, 
+                    name: this.nom,
                     date: this.date + " " + this.time,
                     location: this.adresse,
                     description: this.description,
@@ -139,7 +143,7 @@ import formatDate from "../utils/formatDate";
                     console.log(err.response.request._response);
                     loader.hide();
                     alert("Une erreur est survenue");
-                })           
+                })
             this.isEdit = true;
             }
         },
