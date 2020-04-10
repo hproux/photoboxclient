@@ -28,7 +28,7 @@
   import EventDetail from "./EventDetail";
   import formatDate from "../utils/formatDate";
   export default {
-    props: ['list', 'isPublic', 'isOwner'],
+    props: ['list', 'isPublic', 'isOwner', 'download'],
     data() {
       return {
       }
@@ -36,7 +36,7 @@
 
   methods: {
     showEventDetail(event){
-      this.$showModal(EventDetail, { fullscreen: true, props: { event: event, isPublic: this.isPublic, isOwner: this.isOwner }});
+      this.$showModal(EventDetail, { fullscreen: true, props: { event: event, isPublic: this.isPublic, isOwner: this.isOwner, download : this.download }});
     },
     transformDate(date){
       return date.split(' ')[0];

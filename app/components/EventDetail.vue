@@ -13,39 +13,39 @@
             </StackLayout>
 
             <Label horizontalAlignment="center" class="Label LabelNom" v-model="$props.event.item.name"/>
-            
+
             <StackLayout class="main">
                 <FlexboxLayout class="infos" flexDirection="row" justifyContent="space-between">
                     <FlexboxLayout flexDirection="row">
                         <Image class="ImgPin" src="~/img/pin.png"/>
                         <Label horizontalAlignment="center" class="Label" color="#DDD" v-model="$props.event.item.location"/>
                     </FlexboxLayout>
-                    <Label horizontalAlignment="center" class="Label" color="#DDD" :text="transformDate(event.item.date)"/>
+                    <Label horizontalAlignment="center" class="Label" color="#DDD" :text="event.item.date"/>
                 </FlexboxLayout>
 
                 <StackLayout>
                     <TextView class="TextView" editable="false" v-model="$props.event.item.description"/>
                 </StackLayout>
-            
-            <Button v-if="isPublic" class="Btn" text="Rejoindre" @tap="joinPublicEvent"/>
+
+            <Button v-if="isPublic && !download" class="Btn" text="Rejoindre" @tap="joinPublicEvent"/>
             <Button v-if="!isPublic" class="Btn" text="Voir" @tap="seeEvent"/>
+            <Button v-if="download" class="Btn" text="Voir toutes les images" @tap="downloadArchive"/>
             <Button v-if="isOwner" class="Btn" text="Supprimer" @tap="deleteMyEvent"/>
 
             </StackLayout>
         </StackLayout>
 
-                <StackLayout v-else class="edit">
-                    <TextField class="input" v-model="nom"/>
-                    <TextField class="input" v-model="adresse"/>
-                
-                    <Label class="lbl" :text="dateTime"/>
-                    <Button class="" text="Choisir une date" @tap="selectDate"/>
-                    <Button class="" text="Choisir une heure" @tap="selectTime"/>
+        <StackLayout v-else class="edit">
+            <TextField class="input" v-model="nom"/>
+            <TextField class="input" v-model="adresse"/>
 
-                    <TextView class="input" v-model="description"/>
+            <Label class="lbl" :text="dateTime"/>
+            <Button class="" text="Choisir une date" @tap="selectDate"/>
+            <Button class="" text="Choisir une heure" @tap="selectTime"/>
 
-                    <Button class="Btn" text="Sauvegarder" @tap="save"/>
-                </StackLayout>               
+            <TextView class="input" v-model="description"/>
+            <Button class="Btn" text="Sauvegarder" @tap="save"/>
+        </StackLayout>
     </Page>
 </template>
 
@@ -54,6 +54,7 @@
   import BackArrow from "./BackArrow.vue";
   import TakePhoto from "./TakePhoto";
 import formatDate from "../utils/formatDate";
+  import ImagesList from "./ImagesList";
   const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
   const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
   const MDTPicker = require("nativescript-modal-datetimepicker").ModalDatetimepicker;
@@ -65,20 +66,33 @@ import formatDate from "../utils/formatDate";
       userInteractionEnabled: false,
   };
   export default {
-    props: ['event', 'isPublic', 'isOwner'],
+    props: ['event', 'isPublic', 'isOwner', 'download'],
     components: {
         BackArrow,
         BottomNav,
-        TakePhoto
+        TakePhoto,
+        ImagesList
     },
       methods:{
+          downloadArchive(){
+              let that = this;
+              console.log(that.event.item.token);
+              that.$axios.get("event/pictures/"+that.event.item.token
+              ).then((response) => {
+                  that.images = response.data.pictures;
+                  this.$showModal(ImagesList, { fullscreen: true, props: { images: that.images}});
+              }).catch((err) => {
+                  console.log(err.response.request._response);
+                  alert("Une erreur est survenue");
+              })
+          },
           closeModal(){
               this.$modal.close();
           },
           joinPublicEvent(){
               let that = this;
               loader.show(options);
-              that.$axios.post("event/join/public"+this.event.item.token).then((response) => {
+              that.$axios.post("event/join/public/"+this.event.item.token).then((response) => {
                   loader.hide();
                   console.log(response.data);
                   that.closeModal();
@@ -132,7 +146,7 @@ import formatDate from "../utils/formatDate";
                     this.time = tabDate[1];
                 }
                  this.$axios.put("event/" + this.event.item.token, {
-                    name: this.nom, 
+                    name: this.nom,
                     date: this.date + " " + this.time,
                     location: this.adresse,
                     description: this.description,
@@ -143,7 +157,7 @@ import formatDate from "../utils/formatDate";
                     console.log(err.response.request._response);
                     loader.hide();
                     alert("Une erreur est survenue");
-                })           
+                })
             this.isEdit = true;
             this.closeModal();
             }
@@ -188,6 +202,7 @@ import formatDate from "../utils/formatDate";
             dateTime: this.event.item.date,
             date: null,
             time: null,
+            images : [],
         };
     },
 }
