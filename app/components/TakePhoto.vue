@@ -56,6 +56,8 @@ export default {
   created(){
     loader.show(options2);
     this.getLastEventImage();
+    this.getLastEventComment();
+
     loader.hide();
     this.loaderImg = timerModule.setInterval(() => {
       console.log("Chargement de la derniere image / dernier commentaire");
