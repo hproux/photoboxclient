@@ -34,20 +34,18 @@
             </StackLayout>
         </StackLayout>
 
-        <FlexboxLayout alignItems="center" justifyContent="center" v-else>
-            <StackLayout>
-                <TextField class="TextField TextFieldName" v-model="nom"/>
-                <TextField class="TextField" v-model="adresse"/>
-            
-                <Label class="TextField TextFieldDate" :text="dateTime"/>
-                <Button class="BtnPicker" text="Choisir une date" @tap="selectDate"/>
-                <Button class="BtnPicker" text="Choisir une heure" @tap="selectTime"/>
+                <StackLayout v-else class="edit">
+                    <TextField class="input" v-model="nom"/>
+                    <TextField class="input" v-model="adresse"/>
+                
+                    <Label class="lbl" :text="dateTime"/>
+                    <Button class="" text="Choisir une date" @tap="selectDate"/>
+                    <Button class="" text="Choisir une heure" @tap="selectTime"/>
 
-                <TextView class="TextViewDescription" v-model="description"/>
+                    <TextView class="input" v-model="description"/>
 
-                <Button class="Btn" text="Sauvegarder" @tap="save"/>
-            </StackLayout>               
-        </FlexboxLayout>
+                    <Button class="Btn" text="Sauvegarder" @tap="save"/>
+                </StackLayout>               
     </Page>
 </template>
 
@@ -220,6 +218,18 @@ import formatDate from "../utils/formatDate";
         margin: auto;
         width: 90%;
     }
+
+    .edit{
+        margin: auto;
+        width: 90%;
+        margin-top: 20%;
+        color: white;
+    }
+
+    .input::placeholder{
+        color: white;
+    }
+
     .Label{
         color:white;
         font-size:16em;
@@ -247,4 +257,8 @@ import formatDate from "../utils/formatDate";
         width:128px;
     }
 
+    .lbl{
+        margin-left: 4%;
+        margin-top: 50px;
+    }
 </style>
