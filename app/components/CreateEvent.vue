@@ -92,6 +92,7 @@
               if(response.data.eventpass){
                 alert("Votre clé privée: "+response.data.eventpass);
               }
+              this.$store.commit('toggleRefresh');
               that.closeModal();
               this.navigateTo(BottomNav);
             }).catch((err) => {
