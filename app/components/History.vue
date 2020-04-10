@@ -1,7 +1,7 @@
 <template lang="html">
   <Page actionBarHidden="true">
       <Frame>
-        <EventsList v-if="historyEvent" :list="historyEvent"/>
+        <EventsList isPublic="null" download="true" v-if="historyEvent" :list="historyEvent"/>
       </Frame>
   </Page>
 </template>
