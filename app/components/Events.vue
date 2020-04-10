@@ -5,7 +5,7 @@
         <FlexboxLayout alignItems="center" justifyContent="center">
           <StackLayout width="85%" class="private">
             <Label class="lbl" text="Rejoignez un évènements privés !" />
-            <TextField ckass="input" hint="ex : D7CT5"/>
+            <TextField ckass="input" v-model="eventpass" hint="ex : D7CT5"/>
             <Button class="Btn" text="Rejoindre" @tap="joinPrivateEvent"/>
             </StackLayout>
           </FlexboxLayout>
@@ -32,11 +32,33 @@ export default {
   data(){
     return{
       publicEvents:[],
+      eventpass : null,
     }
   },
   methods:{
     joinPrivateEvent(){
-
+      if(this.eventpass){
+        let options = {
+          message: "Chargement de l'évènement",
+          details: 'Veuillez patienter...',
+          userInteractionEnabled: false,
+        };
+        loader.show(options);
+        this.$axios.post("event/join/private", {
+          eventpass: this.eventpass,
+        }).then((response) => {
+          console.log(response.data);
+          this.eventpass = "";
+          alert("L'événement a bien été rejoint");
+          loader.hide();
+        }).catch((err) => {
+          console.log(err.response.request._response);
+          loader.hide();
+          alert("Une erreur est survenue");
+        })
+      }else{
+        alert("Veuillez inserer une clé évènement");
+      }
     },
   },
   created(){

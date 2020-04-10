@@ -75,6 +75,10 @@
             alert('La description doit contenir au moins 5 caractères');
             return;
           }
+          if(that.description.length>250){
+            alert('La description doit contenir maximum 250 caractères');
+            return;
+          }
           if (that.time && that.date) {
             that.isBusy=true;
             that.$axios.post("event", {
@@ -85,6 +89,9 @@
               description: that.description
             }).then((response) => {
               that.isBusy=false;
+              if(response.data.eventpass){
+                alert("Votre clé privée: "+response.data.eventpass);
+              }
               that.closeModal();
             }).catch((err) => {
               console.log(err.response.request._response);
