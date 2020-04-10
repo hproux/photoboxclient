@@ -29,7 +29,7 @@
 
             <Button v-if="isPublic && !download" class="Btn" text="Rejoindre" @tap="joinPublicEvent"/>
             <Button v-if="!isPublic" class="Btn" text="Voir" @tap="seeEvent"/>
-            <Button v-if="download" class="Btn" text="Télécharger les images" @tap="downloadArchive"/>
+            <Button v-if="download" class="Btn" text="Voir toutes les images" @tap="downloadArchive"/>
             <Button v-if="isOwner" class="Btn" text="Supprimer" @tap="deleteMyEvent"/>
 
             </StackLayout>
@@ -44,7 +44,6 @@
             <Button class="" text="Choisir une heure" @tap="selectTime"/>
 
             <TextView class="input" v-model="description"/>
-
             <Button class="Btn" text="Sauvegarder" @tap="save"/>
         </StackLayout>
     </Page>
@@ -55,6 +54,7 @@
   import BackArrow from "./BackArrow.vue";
   import TakePhoto from "./TakePhoto";
 import formatDate from "../utils/formatDate";
+  import ImagesList from "./ImagesList";
   const LoadingIndicator = require('@nstudio/nativescript-loading-indicator').LoadingIndicator;
   const Mode = require('@nstudio/nativescript-loading-indicator').Mode;
   const MDTPicker = require("nativescript-modal-datetimepicker").ModalDatetimepicker;
@@ -70,11 +70,21 @@ import formatDate from "../utils/formatDate";
     components: {
         BackArrow,
         BottomNav,
-        TakePhoto
+        TakePhoto,
+        ImagesList
     },
       methods:{
           downloadArchive(){
-
+              let that = this;
+              console.log(that.event.item.token);
+              that.$axios.get("event/pictures/"+that.event.item.token
+              ).then((response) => {
+                  that.images = response.data.pictures;
+                  this.$showModal(ImagesList, { fullscreen: true, props: { images: that.images}});
+              }).catch((err) => {
+                  console.log(err.response.request._response);
+                  alert("Une erreur est survenue");
+              })
           },
           closeModal(){
               this.$modal.close();
@@ -187,6 +197,7 @@ import formatDate from "../utils/formatDate";
             dateTime: this.event.item.date,
             date: null,
             time: null,
+            images : [],
         };
     },
 }
