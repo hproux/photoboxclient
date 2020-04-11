@@ -25,6 +25,7 @@
 
                 <StackLayout>
                     <TextView class="TextView" editable="false" v-model="$props.event.item.description"/>
+                    <Label v-if="isOwner"  horizontalAlignment="left" class="Label LabelPlayerpass" v-model="playerpass"/>
                 </StackLayout>
 
             <Button v-if="isPublic && !download" class="Btn" text="Rejoindre" @tap="joinPublicEvent"/>
@@ -73,6 +74,9 @@ import formatDate from "../utils/formatDate";
         TakePhoto,
         ImagesList
     },
+      created(){
+        console.log(this.event);
+      },
       methods:{
           downloadArchive(){
               let that = this;
@@ -199,6 +203,7 @@ import formatDate from "../utils/formatDate";
             nom: this.event.item.name,
             adresse: this.event.item.location,
             description: this.event.item.description,
+            playerpass : "accès au player: "+this.event.item.playerpass,
             dateTime: this.event.item.date,
             date: null,
             time: null,
@@ -259,8 +264,13 @@ import formatDate from "../utils/formatDate";
 
     .LabelNom{
        font-size: 25px;
-        margin-bottom: 5%;
+        margin-bottom: 3%;
     }
+
+    .LabelPlayerpass{
+        font-size: 16px !important;
+    }
+
     .backArrow{
         margin-top: 3%;
     }
